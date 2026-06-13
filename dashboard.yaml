@@ -9,6 +9,7 @@ views:
     title: Dashboard
     path: dashboard
     icon: mdi:tablet-dashboard
+    theme: liquid-glass
     max_columns: 10
     layout:
       grid-rows: auto
@@ -116,6 +117,7 @@ views:
     title: Plan
     path: plan
     icon: mdi:view-dashboard-edit
+    theme: liquid-glass
     max_columns: 10
     sections:
       - type: grid
