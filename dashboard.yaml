@@ -69,11 +69,9 @@ views:
                         name: |
                           [[[
                             const clock = states['sensor.live_clock'];
-                            
                             if (!clock || !clock.state || ['unknown', 'unavailable'].includes(clock.state)) {
                               return '15:24<span class="clock-seconds">37</span>';
                             }
-                            
                             const t = clock.state;
                             const hm = t.slice(0, -3);
                             const s = t.slice(-2);
