@@ -191,6 +191,3 @@ views:
               columns: 5
               rows: 4
         column_span: 4
-      - type: grid
-        cards: []
-        column_span: 4
