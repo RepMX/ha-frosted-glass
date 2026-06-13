@@ -112,3 +112,90 @@ views:
       - type: grid
       - type: grid
       - type: grid
+      - type: grid
+      - type: grid
+    max_columns: 10
+    cards: []
+    theme: liquid-glass
+  - type: sections
+    max_columns: 10
+    path: plan
+    title: Plan
+    sections:
+      - type: grid
+        cards:
+          - type: custom:mushroom-select-card
+            entity: input_select.column_ab1
+            grid_options:
+              columns: 10
+              rows: 4
+          - type: custom:mushroom-select-card
+            entity: input_select.column_c1
+            grid_options:
+              columns: 5
+              rows: 4
+          - type: custom:mushroom-select-card
+            entity: input_select.column_d1
+            grid_options:
+              columns: 5
+              rows: 4
+          - type: custom:mushroom-select-card
+            entity: input_select.column_ef1
+            grid_options:
+              columns: 10
+              rows: 4
+          - type: custom:mushroom-select-card
+            entity: input_select.column_g1
+            grid_options:
+              columns: 5
+              rows: 4
+            name: Column G1
+          - type: custom:mushroom-select-card
+            entity: input_select.column_h1
+            grid_options:
+              columns: 5
+              rows: 4
+            name: Column H1
+        column_span: 4
+      - type: grid
+        cards:
+          - type: custom:mushroom-select-card
+            entity: input_select.column_a2
+            grid_options:
+              columns: 5
+              rows: 4
+          - type: custom:mushroom-select-card
+            entity: input_select.column_b2
+            grid_options:
+              columns: 5
+              rows: 4
+          - type: custom:mushroom-select-card
+            entity: input_select.column_cd2
+            grid_options:
+              columns: 10
+              rows: 4
+          - type: custom:mushroom-select-card
+            entity: input_select.column_e2
+            grid_options:
+              columns: 5
+              rows: 4
+          - type: custom:mushroom-select-card
+            entity: input_select.column_f2
+            grid_options:
+              columns: 5
+              rows: 4
+          - type: custom:mushroom-select-card
+            entity: input_select.column_g2
+            grid_options:
+              columns: 5
+              rows: 4
+          - type: custom:mushroom-select-card
+            entity: input_select.column_h2
+            grid_options:
+              columns: 5
+              rows: 4
+        column_span: 4
+      - type: grid
+        cards: []
+        column_span: 4
+    
