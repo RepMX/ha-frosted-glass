@@ -1,1 +1,5 @@
-
+kiosk_mode:
+  non_admin_settings:
+    kiosk: true
+  hide_header: "{{ is_state('input_boolean.standby_kiosk_mode', 'on') }}"
+  hide_sidebar: "{{ is_state('input_boolean.standby_kiosk_mode', 'on') }}"
