@@ -111,8 +111,7 @@ views:
       - type: grid
       - type: grid
       - type: grid
-    cards: []
-    theme: liquid-glass
+
   - type: sections 
     title: Plan
     path: plan
@@ -195,5 +194,3 @@ views:
       - type: grid
         cards: []
         column_span: 4
-    cards: []
-    theme: liquid-glass
