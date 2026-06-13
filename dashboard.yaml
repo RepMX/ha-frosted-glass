@@ -21,7 +21,7 @@ views:
               - sensor.live_clock
             styles:
               grid:
-                - grid-template-areas: '"notifications time_pics"'
+                - grid-template-areas: '"notifications time_profiles"'
                   align-items: center
                   align-content: center
               card:
@@ -33,14 +33,14 @@ views:
                   margin: 10px 25px 0px 5px
             custom_fields:
               notifications: ""
-              time_pics:
+              time_profiles:
                 card:
                   type: custom:button-card
                   triggers_update:
                     - sensor.live_clock
                   styles:
                     grid:
-                      - grid-template-areas: '"time pics"'
+                      - grid-template-areas: '"time profiles"'
                       - grid-template-columns: min-content auto
                       - grid-template-rows: 1fr
                     card:
@@ -52,7 +52,7 @@ views:
                       - border-radius: 0px
                       - height: 80px
                     custom_fields:
-                      pics:
+                      profiles:
                         - padding-right: 15px
                   show_state: true
                   show_name: false
@@ -103,7 +103,7 @@ views:
                             - padding: 12px
                             - text-box: trim-both cap alphabetic
                             - overflow: hidden
-                    pics: ""
+                    profiles: ""
                   grid_options:
                     columns: full
         column_span: 10
