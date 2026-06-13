@@ -121,7 +121,7 @@ views:
   - type: sections 
     title: Plan
     path: plan
-    icon: mdi:tablet-dashboardmdi:view-dashboard-edit
+    icon: mdi:view-dashboard-edit
     max_columns: 10
     sections:
       - type: grid
