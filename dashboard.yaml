@@ -14,6 +14,8 @@ views:
       - type: grid
         cards:
           - type: custom:button-card
+            triggers_update:
+              - sensor.live_clock
             styles:
               grid:
                 - grid-template-areas: '"notifications time_pics"'
@@ -27,10 +29,12 @@ views:
                   padding: 5px 5px 5px 5px
                   margin: 10px 25px 0px 5px
             custom_fields:
-              notifications:
+              notifications: ""
               time_pics:
                 card:
                   type: custom:button-card
+                  triggers_update:
+                    - sensor.live_clock
                   styles:
                     grid:
                       - grid-template-areas: '"time pics"'
@@ -52,7 +56,58 @@ views:
                   show_icon: false
                   custom_fields:
                     time:
-                    pics:
+                      card:
+                        type: custom:button-card
+                        show_name: true
+                        show_icon: false
+                        show_state: false
+                        tap_action:
+                          action: perform-action
+                          perform_action: input_boolean.toggle
+                          target:
+                            entity_id: input_boolean.standby_kiosk_mode
+                        name: |
+                          [[[
+                            const clock = states['sensor.live_clock'];
+                            
+                            if (!clock || !clock.state || ['unknown', 'unavailable'].includes(clock.state)) {
+                              return '15:24<span class="clock-seconds">37</span>';
+                            }
+                            
+                            const t = clock.state;
+                            const hm = t.slice(0, -3);
+                            const s = t.slice(-2);
+                            return `${hm}<span class="clock-seconds">${s}</span>`;
+                          ]]]
+                        extra_styles: |
+                          .clock-seconds {
+                            display: inline-block;
+                            font-weight: 400;
+                            text-box: trim-both cap alphabetic;
+                            font-size: 42%;
+                            color: rgba(220,220,220,0.6);
+                            padding: 7px 0px 7px 7px;
+                            transform: translateY(-72%);
+                          }
+                        styles:
+                          card:
+                            - background: transparent
+                            - border: none
+                            - box-shadow: none
+                            - margin: 0px
+                            - padding: 0px
+                            - width: max-content
+                            - height: max-content
+                            - justify-self: end
+                          name:
+                            - font-family: "'Dongle', sans-serif"
+                            - font-size: 96px
+                            - font-weight: 300
+                            - color: rgba(255,255,255,0.9)
+                            - padding: 12px
+                            - text-box: trim-both cap alphabetic
+                            - overflow: hidden
+                    pics: ""
                   grid_options:
                     columns: full
         column_span: 10
