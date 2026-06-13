@@ -63,11 +63,6 @@ views:
                         show_name: true
                         show_icon: false
                         show_state: false
-                        tap_action:
-                          action: perform-action
-                          perform_action: input_boolean.toggle
-                          target:
-                            entity_id: input_boolean.standby_kiosk_mode
                         name: |
                           [[[
                             const clock = states['sensor.live_clock'];
