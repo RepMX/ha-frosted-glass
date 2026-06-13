@@ -3,3 +3,59 @@ kiosk_mode:
     kiosk: true
   hide_header: "{{ is_state('input_boolean.standby_kiosk_mode', 'on') }}"
   hide_sidebar: "{{ is_state('input_boolean.standby_kiosk_mode', 'on') }}"
+button_card_templates:
+views:
+  - type: sections
+    title: Dashboard
+    path: dashboard
+    layout:
+      grid-rows: auto
+    sections:
+      - type: grid
+        cards:
+          - type: custom:button-card
+            styles:
+              grid:
+                - grid-template-areas: '"notifications time_pics"'
+                  align-items: center
+                  align-content: center
+              card:
+                - background-color: transparent
+                  border-radius: 0px
+                  height: 80px
+                  width: 1300px
+                  padding: 5px 5px 5px 5px
+                  margin: 10px 25px 0px 5px
+            custom_fields:
+              notifications:
+              time_pics:
+                card:
+                  type: custom:button-card
+                  styles:
+                    grid:
+                      - grid-template-areas: '"time pics"'
+                      - grid-template-columns: min-content auto
+                      - grid-template-rows: 1fr
+                    card:
+                      - background: transparent
+                      - margin: 0px 0px 0px 0px
+                      - justify-self: end
+                      - justify-content: end
+                      - align-self: center
+                      - border-radius: 0px
+                      - height: 80px
+                    custom_fields:
+                      pics:
+                        - padding-right: 15px
+                  show_state: true
+                  show_name: false
+                  show_icon: false
+                  custom_fields:
+                    time:
+                    pics:
+                  grid_options:
+                    columns: full
+        column_span: 10
+      - type: grid
+      - type: grid
+      - type: grid
