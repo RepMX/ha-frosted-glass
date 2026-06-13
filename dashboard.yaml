@@ -8,6 +8,8 @@ views:
   - type: sections
     title: Dashboard
     path: dashboard
+    icon: mdi:tablet-dashboard
+    max_columns: 10
     layout:
       grid-rows: auto
     sections:
@@ -114,13 +116,13 @@ views:
       - type: grid
       - type: grid
       - type: grid
-    max_columns: 10
     cards: []
     theme: liquid-glass
-  - type: sections
-    max_columns: 10
-    path: plan
+  - type: sections 
     title: Plan
+    path: plan
+    icon: mdi:tablet-dashboardmdi:view-dashboard-edit
+    max_columns: 10
     sections:
       - type: grid
         cards:
@@ -198,3 +200,5 @@ views:
       - type: grid
         cards: []
         column_span: 4
+    cards: []
+    theme: liquid-glass
