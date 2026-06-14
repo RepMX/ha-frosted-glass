@@ -852,6 +852,51 @@ views:
                                       state: Thermostat
                             - type: vertical-stack
                               cards:
+                                - type: conditional
+                                  conditions:
+                                    - conditions: state
+                                      entity: input_select.column_b2
+                                      state: Sports
+                                  card:
+                                    type: custom:swipe-card
+                                    parameters:
+                                      allowTouchMove: true
+                                      autoHeight: true
+                                      height: 375
+                                      effect: coverflow
+                                      direction: vertical
+                                      spaceBetween: 0
+                                      coverflowEffect:
+                                        rotate: 0
+                                        stretch: 0
+                                        depth: 100
+                                        modifier: 0
+                                        slideShadows: true
+                                      scrollbar:
+                                        hide: true
+                                        draggable: true
+                                        snapOnRelease: true
+                                    cards:
+                                      - type: custom:auto-entities
+                                        card:
+                                          type: vertical-stack
+                                        card_param: cards
+                                        filter:
+                                          include:
+                                            - entity_id: sensor.*
+                                              attributes:
+                                                league: AFL
+                                                team_homeaway: home
+                                              state: IN
+                                              options:
+                                                type: custom:button-card
+                                                template: sports_tall
+                                                entity: this.entity_id
+                                        card_mod:
+                                          styles: |
+                                            ha-card {
+                                              max-height: 375px;
+                                              margin-bottom: 10px !important;
                                 - type: custom:button-card
                                   template: weather
                                   visibility:
@@ -912,12 +957,6 @@ views:
                                     - condition: state
                                       entity: input_select.column_b2
                                       state: Thermostat
-                                - type: custom:button-card
-                                  template: sports
-                                  visibility:
-                                    - condition: state
-                                      entity: input_select.column_b2
-                                      state: Sports
                             - type: vertical-stack
                               cards:
                                 - type: custom:button-card
@@ -1047,51 +1086,6 @@ views:
                                       state: Thermostat
                             - type: vertical-stack
                               cards:
-                                - type: conditional
-                                  conditions:
-                                    - conditions: state
-                                      entity: input_select.column_h1
-                                      state: Sports
-                                  card:
-                                    type: custom:swipe-card
-                                    parameters:
-                                      allowTouchMove: true
-                                      autoHeight: true
-                                      height: 375
-                                      effect: coverflow
-                                      direction: vertical
-                                      spaceBetween: 0
-                                      coverflowEffect:
-                                        rotate: 0
-                                        stretch: 0
-                                        depth: 100
-                                        modifier: 0
-                                        slideShadows: true
-                                      scrollbar:
-                                        hide: true
-                                        draggable: true
-                                        snapOnRelease: true
-                                    cards:
-                                      - type: custom:auto-entities
-                                        card:
-                                          type: vertical-stack
-                                        card_param: cards
-                                        filter:
-                                          include:
-                                            - entity_id: sensor.*
-                                              attributes:
-                                                league: AFL
-                                                team_homeaway: home
-                                              state: IN
-                                              options:
-                                                type: custom:button-card
-                                                template: sports_tall
-                                                entity: this.entity_id
-                                        card_mod:
-                                          styles: |
-                                            ha-card {
-                                              max-height: 375px;
-                                              margin-bottom: 10px !important;
                                 - type: custom:button-card
                                   template: weather
                                   visibility:
@@ -1128,6 +1122,12 @@ views:
                                     - condition: state
                                       entity: input_select.column_h1
                                       state: Recent Activity
+                                - type: custom:button-card
+                                  template: sports
+                                  visibility:
+                                    - condition: state
+                                      entity: input_select.column_h1
+                                      state: Sports
                                 - type: custom:button-card
                                   template: health
                                   visibility:
@@ -1476,79 +1476,77 @@ views:
     title: Plan
     path: plan
     icon: mdi:view-dashboard-edit
-    theme: liquid-glass
-    max_columns: 10
     sections:
       - type: grid
+        column_span: 4
         cards:
           - type: custom:mushroom-select-card
             entity: input_select.column_ab1
             grid_options:
-              columns: 10
-              rows: 4
+              columns: 12
+              rows: 2
           - type: custom:mushroom-select-card
             entity: input_select.column_c1
             grid_options:
-              columns: 5
-              rows: 4
+              columns: 6
+              rows: 2
           - type: custom:mushroom-select-card
             entity: input_select.column_d1
             grid_options:
-              columns: 5
-              rows: 4
+              columns: 6
+              rows: 2
           - type: custom:mushroom-select-card
             entity: input_select.column_ef1
             grid_options:
-              columns: 10
-              rows: 4
+              columns: 12
+              rows: 2
           - type: custom:mushroom-select-card
             entity: input_select.column_g1
             grid_options:
-              columns: 5
-              rows: 4
+              columns: 6
+              rows: 2
             name: Column G1
           - type: custom:mushroom-select-card
             entity: input_select.column_h1
             grid_options:
-              columns: 5
-              rows: 4
+              columns: 6
+              rows: 2
             name: Column H1
-        column_span: 4
       - type: grid
+        column_span: 4
         cards:
           - type: custom:mushroom-select-card
             entity: input_select.column_a2
             grid_options:
-              columns: 5
-              rows: 4
+              columns: 6
+              rows: 2
           - type: custom:mushroom-select-card
             entity: input_select.column_b2
             grid_options:
-              columns: 5
-              rows: 4
+              columns: 6
+              rows: 2
           - type: custom:mushroom-select-card
             entity: input_select.column_cd2
             grid_options:
-              columns: 10
-              rows: 4
+              columns: 12
+              rows: 2
           - type: custom:mushroom-select-card
             entity: input_select.column_e2
             grid_options:
-              columns: 5
-              rows: 4
+              columns: 6
+              rows: 2
           - type: custom:mushroom-select-card
             entity: input_select.column_f2
             grid_options:
-              columns: 5
-              rows: 4
+              columns: 6
+              rows: 2
           - type: custom:mushroom-select-card
             entity: input_select.column_g2
             grid_options:
-              columns: 5
-              rows: 4
+              columns: 6
+              rows: 2
           - type: custom:mushroom-select-card
             entity: input_select.column_h2
             grid_options:
-              columns: 5
-              rows: 4
-        column_span: 4
+              columns: 6
+              rows: 2
