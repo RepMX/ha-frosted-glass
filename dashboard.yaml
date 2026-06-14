@@ -4,6 +4,427 @@ kiosk_mode:
   hide_header: "{{ is_state('input_boolean.standby_kiosk_mode', 'on') }}"
   hide_sidebar: "{{ is_state('input_boolean.standby_kiosk_mode', 'on') }}"
 button_card_templates:
+  person_status_badge:
+    styles:
+      grid:
+        - grid-template-areas: "\"person\" \"person\""
+      card:
+        - background: transparent
+        - justify-content: end
+        - align-content: end
+        - align-self: end
+        - width: 60px
+        - padding: 0px
+        - border-radius: 0px
+        - border: none
+        - margin-right: "-20px"
+    custom_fields:
+      person:
+        card:
+          type: horizontal-stack
+          cards:
+            - type: custom:button-card
+              entity: "[[[ return variables.person_entity ]]]"
+              show_entity_picture: true
+              show_name: false
+              show_state: false
+              styles:
+                card:
+                  - width: 35px
+                  - height: 35px
+                  - border-radius: 50%
+                  - overflow: hidden
+                  - padding: 0
+                  - border: none
+                entity_picture:
+                  - width: 100%
+                  - height: 100%
+                  - object-fit: cover
+                  - margin: 0
+            - type: custom:button-card
+              icon: |
+                [[[ 
+                  const loc_sensor = states[variables.icon_sensor];
+                  if (!loc_sensor || !loc_sensor.state || ['unknown', 'unavailable'].includes(loc_sensor.state)) {
+                    return 'mdi:home'; 
+                  }
+                  return loc_sensor.state;
+                ]]]
+              show_name: false
+              show_state: false
+              show_icon: true
+              styles:
+                card:
+                  - width: 15px
+                  - height: 15px
+                  - border-radius: 50%
+                  - margin-left: "-18px"
+                  - border: none
+                  - align-self: center
+                  - justify-self: center
+                  - padding: 0px 0px 0px 0px
+                img_cell:
+                  - background-color: |
+                      [[[ 
+                        const loc_sensor = states[variables.colour_sensor];
+                        if (!loc_sensor || !loc_sensor.state || ['unknown', 'unavailable'].includes(loc_sensor.state)) {
+                          return '#808080';
+                        }
+                        return loc_sensor.state;
+                      ]]]
+                icon:
+                  - width: 80%
+  divider:
+    type: custom:button-card
+    show_name: false
+    show_state: false
+    show_icon: false
+    styles:
+      card:
+        - background-color: transparent
+        - margin: 0
+        - padding: 0px 10px
+        - border: none
+        - box-shadow: none
+      grid:
+        - grid-template-areas: "\"line\""
+        - grid-template-columns: 1fr
+        - grid-template-rows: 1fr
+      custom_fields:
+        line:
+          - background-color: rgba(255, 255, 255, 0.1)
+          - height: 1px
+          - width: 100%
+    custom_fields:
+      line: " "
+  list_container_heading:
+    card_mod:
+      class: frosted-glass
+    styles:
+      grid:
+        - grid-template-areas: "\"n\" \"header\" \"stack\""
+        - grid-template-columns: 1fr
+        - grid-template-rows: auto 33px 1fr
+        - align-content: start
+        - align-self: start
+        - justify-content: start
+        - justify-self: start
+      card:
+        - background-color: transparent
+        - height: 375px
+        - width: 303px
+        - padding: 0px
+        - margin: 0px
+        - overflow: hidden
+      name:
+        - font-size: 27px
+        - letter-spacing: 0.5px
+        - font-weight: 300
+        - padding: 20px 30px 0px 30px
+        - align-self: start
+        - justify-self: start
+        - width: 100%
+        - box-sizing: border-box
+        - text-align: left
+        - color: rgba(255,255,255,0.9)
+  subheading_caps:
+    variables:
+      var_name: null
+    type: custom:button-card
+    name: "[[[ return variables.var_name]]]"
+    styles:
+      grid:
+        - grid-template-columns: 1fr
+        - grid-template-rows: min-content
+      card:
+        - justify-self: start
+          justify-content: start
+          align-self: start
+          align-content: start
+          border-radius: 0px
+          background: transparent
+          background-color: transparent
+          border: none
+          padding: 0px 10px
+          text-align: left
+          height: 20px
+          overflow: visible
+      name:
+        - font-family: var(--primary-font-family)
+          justify-self: start
+          align-self: start
+          font-size: 23px
+          font-weight: 300
+          letter-spacing: 1px
+          color: rgba(255,255,255,0.4)
+          text-transform: uppercase
+          margin: 0px
+          padding: 0px
+          text-align: left
+          overflow: visible
+      label:
+        - justify-self: start
+          align-self: start
+          font-size: 25px
+          font-weight: 300
+          color: rgba(255,255,255,0.9)
+  sidebar_room_cards:
+    variables:
+      var_name: null
+      var_entity: null
+      var_script: null
+      var_lights_sensor: null
+      var_light: null
+      var_temp: null
+      var_color: null
+      var_climate: null
+    type: custom:button-card
+    entity: "[[[ return variables.var_entity ]]]"
+    name: "[[[ return variables.var_name ]]]"
+    show_name: true
+    show_icon: true
+    tap_action:
+      action: perform-action
+      perform_action: "[[[ return variables.var_script ]]]"
+    extra_styles: |
+      ha-ripple {
+        border-radius: 20px;
+      }
+      #card:focus-visible, #card:focus {
+        outline: 2px solid rgba(128, 128, 128, 0.4) !important;
+        outline-offset: -2px;
+        background-color: rgba(128, 128, 128, 0.15) !important;
+        box-shadow: 0 0 10px rgba(128, 128, 128, 0.2) !important;
+      }
+    styles:
+      grid:
+        - grid-template-areas: "\"i n temp\""
+        - grid-template-columns: min-content 1fr min-content
+        - height: 100%
+        - align-items: center
+      card:
+        - height: 50px
+        - margin: 0px
+        - padding: 0px 15px
+        - background: transparent
+        - border-radius: 0px
+        - border: none
+        - box-shadow: none
+        - background-color: transparent
+      name:
+        - font-weight: 300
+        - font-size: 23px
+        - justify-self: start
+        - padding-bottom: 0px
+      icon:
+        - width: 17px
+        - height: 17px
+        - color: var(--primary-text-color)
+      img_cell:
+        - display: flex
+        - align-items: center
+        - justify-content: center
+        - width: 23px
+        - height: 23px
+        - border-radius: 5px
+        - background-color: "[[[ return variables.var_color]]]"
+        - margin-right: 10px
+        - border: solid .1em rgba(255,255,255,0.1)
+      custom_fields:
+        temp:
+          - align-self: center
+          - justify-self: end
+          - padding: 0px
+          - z-index: 3
+    custom_fields:
+      temp:
+        card:
+          type: custom:button-card
+          show_name: false
+          show_icon: false
+          show_state: false
+          tap_action:
+            action: none
+          styles:
+            grid:
+              - grid-template-areas: "\"zero one two\""
+              - grid-template-columns: min-content min-content min-content
+              - align-items: center
+              - gap: 8px
+            card:
+              - background-color: transparent
+              - padding: 0px
+              - border: none
+              - box-shadow: none
+          custom_fields:
+            zero:
+              card:
+                type: custom:button-card
+                entity: "[[[ return variables.var_climate ]]]"
+                icon: mdi:thermometer
+                show_name: false
+                show_state: false
+                show_icon: true
+                tap_action:
+                  action: more-info
+                state:
+                  - operator: "=="
+                    attribute: hvac_action
+                    value: cool
+                    icon: mdi:snowflake
+                    styles:
+                      card:
+                        - background: rgba(90,200,250,1)
+                      icon:
+                        - color: rgba(255,255,255,1)
+                  - operator: "=="
+                    value: heat
+                    icon: mdi:fire
+                    styles:
+                      card:
+                        - background: rgba(255,59,48,1)
+                      icon:
+                        - color: rgba(255,255,255,1)
+                  - value: unavailable
+                    styles:
+                      card:
+                        - background: transparent
+                      icon:
+                        - color: transparent
+                      state:
+                        - color: transparent
+                styles:
+                  img_cell:
+                    - display: flex
+                    - align-items: center
+                    - justify-content: center
+                  icon:
+                    - width: 15px
+                    - height: 15px
+                    - color: rgba(255, 255, 255, 0.3)
+                  state:
+                    - color: rgba(255,255,255,1)
+                    - font-size: 12px
+                  card:
+                    - height: 25px
+                    - width: 25px
+                    - display: flex
+                    - align-items: center
+                    - justify-content: center
+                    - background-color: transparent
+                    - padding: 0px
+            one:
+              card:
+                type: custom:button-card
+                entity: "[[[ return variables.var_lights_sensor ]]]"
+                icon: mdi:lightbulb
+                tap_action:
+                  action: call-service
+                  service: light.toggle
+                  target:
+                    entity_id: "[[[ return variables.var_light ]]]"
+                show_name: false
+                show_state: true
+                show_icon: true
+                state:
+                  - value: "0"
+                    icon: mdi:lightbulb
+                    styles:
+                      card:
+                        - background-color: rgba(0, 0, 0, 0.1)
+                      icon:
+                        - color: rgba(255, 255, 255, 0.3)
+                  - value: unavailable
+                    styles:
+                      card:
+                        - background: transparent
+                      icon:
+                        - color: transparent
+                      state:
+                        - color: transparent
+                styles:
+                  grid:
+                    - grid-template-areas: "\"i s\""
+                    - grid-template-columns: 1fr auto
+                    - align-items: center
+                    - justify-items: center
+                  img_cell:
+                    - display: flex
+                    - align-items: center
+                    - justify-content: center
+                  icon:
+                    - width: 12px
+                    - height: 12px
+                    - color: white
+                  state:
+                    - color: white
+                    - font-size: 12px
+                    - justify-self: start
+                  card:
+                    - width: 35px
+                    - height: 25px
+                    - padding: 0px
+                    - background-color: "#ff9800"
+            two:
+              card:
+                type: custom:button-card
+                entity: "[[[ return variables.var_temp ]]]"
+                show_name: false
+                show_state: true
+                show_icon: false
+                unit: °
+                show_units: false
+                state:
+                  - value: 17
+                    operator: <
+                    styles:
+                      card:
+                        - background: "#5ac8fa"
+                  - value: 19
+                    operator: <=
+                    styles:
+                      card:
+                        - background: rgba(0, 0, 0, 0.1)
+                  - value: 23
+                    operator: <=
+                    styles:
+                      card:
+                        - background: rgba(0, 0, 0, 0.1)
+                  - value: 24
+                    operator: <=
+                    styles:
+                      card:
+                        - background: rgba(0, 0, 0, 0.1)
+                  - value: 35
+                    operator: <=
+                    styles:
+                      card:
+                        - background: var(--label-badge-red)
+                  - value: unavailable
+                    styles:
+                      card:
+                        - background: transparent
+                      icon:
+                        - color: transparent
+                      state:
+                        - color: transparent
+                styles:
+                  icon:
+                    - width: 20px
+                    - height: 20px
+                    - color: white
+                  state:
+                    - color: white
+                    - font-size: 12px
+                  card:
+                    - height: 25px
+                    - width: 50px
+                    - display: flex
+                    - align-items: center
+                    - justify-content: center
+                    - padding: 0px
+                    - background: rgba(0,0,0,0.1)
+                    - border: none
 views:
   - type: sections
     title: Dashboard
