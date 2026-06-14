@@ -1448,29 +1448,6 @@ views:
                                 card:
                                   - background: transparent
                                     width: 20px
-                    - type: custom:layout-card
-                      layout_type: custom:grid-layout
-                      cards:
-                        - type: custom:layout-card
-                          layout_type: custom:grid-layout
-                          layout:
-                            grid-template-columns: auto auto auto auto
-                            margin: 0px 0px 14px 0px
-                          cards:
-                            - type: custom:button-card
-                              styles:
-                                card:
-                                  - background: transparent
-                                    width: 20px
-                            - type: custom:button-card
-                              template: music
-                            - type: custom:button-card
-                              template: news_headlines
-                            - type: custom:button-card
-                              styles:
-                                card:
-                                  - background: transparent
-                                    width: 20px
                 custom_css:
                   "--pagination-bullet-distance": 0px
                   "--pagination-bullet-border": transparent
