@@ -1476,6 +1476,7 @@ views:
     title: Plan
     path: plan
     icon: mdi:view-dashboard-edit
+    background: "center / cover no-repeat fixed #111111"
     sections:
       - type: grid
         column_span: 4
