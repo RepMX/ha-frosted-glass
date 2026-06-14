@@ -442,16 +442,17 @@ views:
               - sensor.live_clock
             styles:
               grid:
-                - grid-template-areas: '"notifications time_profiles"'
-                  align-items: center
-                  align-content: center
+                - grid-template-areas: "\"notifications time_profiles\""
+                - align-items: center
+                - align-content: center
               card:
                 - background-color: transparent
-                  border-radius: 0px
-                  height: 80px
-                  width: 1300px
-                  padding: 5px 5px 5px 5px
-                  margin: 10px 25px 0px 5px
+                - border-radius: 0px
+                - border: none
+                - height: 80px
+                - width: 1300px
+                - padding: 0px
+                - margin: 0px
             custom_fields:
               notifications: ""
               time_profiles:
@@ -461,7 +462,7 @@ views:
                     - sensor.live_clock
                   styles:
                     grid:
-                      - grid-template-areas: '"time profiles"'
+                      - grid-template-areas: "\"time profiles\""
                       - grid-template-columns: min-content auto
                       - grid-template-rows: 1fr
                     card:
@@ -471,6 +472,7 @@ views:
                       - justify-content: end
                       - align-self: center
                       - border-radius: 0px
+                      - border: none
                       - height: 80px
                     custom_fields:
                       profiles:
@@ -482,139 +484,92 @@ views:
                     time:
                       card:
                         type: custom:button-card
-                        triggers_update:
-                          - sensor.live_clock
+                        show_name: true
+                        show_icon: false
+                        show_state: false
+                        name: |
+                          [[[
+                            const clock = states['sensor.live_clock'];
+                            if (!clock || !clock.state || ['unknown', 'unavailable'].includes(clock.state)) {
+                              return '15:24<span class="clock-seconds">37</span>';
+                            }
+                            const t = clock.state;
+                            const hm = t.slice(0, -3);
+                            const s = t.slice(-2);
+                            return `${hm}<span class="clock-seconds">${s}</span>`;
+                          ]]]
+                        extra_styles: |
+                          .clock-seconds {
+                            display: inline-block;
+                            font-weight: 400;
+                            text-box: trim-both cap alphabetic;
+                            font-size: 42%;
+                            color: rgba(220,220,220,0.6);
+                            padding: 7px 0px 7px 7px;
+                            transform: translateY(-72%);
+                            width: 1.3em;
+                            text-align: left;
+                          }
+                        styles:
+                          card:
+                            - background: transparent
+                            - border: none
+                            - box-shadow: none
+                            - margin: 0px
+                            - padding: 0px
+                            - width: max-content
+                            - height: max-content
+                            - justify-self: end
+                          name:
+                            - font-family: "'Dongle', sans-serif"
+                            - font-size: 96px
+                            - font-weight: 300
+                            - color: rgba(255,255,255,0.9)
+                            - padding: 12px
+                            - text-box: trim-both cap alphabetic
+                            - overflow: hidden
+                    profiles:
+                      card:
+                        type: custom:button-card
                         styles:
                           grid:
-                            - grid-template-areas: "\"notifications time_profiles\""
-                              align-items: center
-                              align-content: center
+                            - grid-template-columns: max-content
+                            - grid-template-rows: min-content
+                            - grid-template-areas: "\"one two\""
+                            - align-items: start
+                            - column-gap: 5px
                           card:
                             - background-color: transparent
-                              border-radius: 0px
-                              border: none
-                              height: 80px
-                              width: 1300px
-                              padding: 5px 5px 5px 5px
-                              margin: 10px 25px 0px 5px
+                            - width: 120%
+                            - height: 50px
+                            - margin: 0px
+                            - border: none
                         custom_fields:
-                          notifications: ""
-                          time_profiles:
+                          one:
                             card:
                               type: custom:button-card
-                              triggers_update:
-                                - sensor.live_clock
-                              styles:
-                                grid:
-                                  - grid-template-areas: "\"time profiles\""
-                                  - grid-template-columns: min-content auto
-                                  - grid-template-rows: 1fr
-                                card:
-                                  - background: transparent
-                                  - margin: 0px 0px 0px 0px
-                                  - justify-self: end
-                                  - justify-content: end
-                                  - align-self: center
-                                  - border-radius: 0px
-                                  - border: none
-                                  - height: 80px
-                                custom_fields:
-                                  profiles:
-                                    - padding-right: 15px
-                              show_state: true
-                              show_name: false
-                              show_icon: false
-                              custom_fields:
-                                time:
-                                  card:
-                                    type: custom:button-card
-                                    show_name: true
-                                    show_icon: false
-                                    show_state: false
-                                    name: |
-                                      [[[
-                                        const clock = states['sensor.live_clock'];
-                                        if (!clock || !clock.state || ['unknown', 'unavailable'].includes(clock.state)) {
-                                          return '15:24<span class="clock-seconds">37</span>';
-                                        }
-                                        const t = clock.state;
-                                        const hm = t.slice(0, -3);
-                                        const s = t.slice(-2);
-                                        return `${hm}<span class="clock-seconds">${s}</span>`;
-                                      ]]]
-                                    extra_styles: |
-                                      .clock-seconds {
-                                        display: inline-block;
-                                        font-weight: 400;
-                                        text-box: trim-both cap alphabetic;
-                                        font-size: 42%;
-                                        color: rgba(220,220,220,0.6);
-                                        padding: 7px 0px 7px 7px;
-                                        transform: translateY(-72%);
-                                        width: 1.3em;
-                                        text-align: left;
-                                      }
-                                    styles:
-                                      card:
-                                        - background: transparent
-                                        - border: none
-                                        - box-shadow: none
-                                        - margin: 0px
-                                        - padding: 0px
-                                        - width: max-content
-                                        - height: max-content
-                                        - justify-self: end
-                                      name:
-                                        - font-family: "'Dongle', sans-serif"
-                                        - font-size: 96px
-                                        - font-weight: 300
-                                        - color: rgba(255,255,255,0.9)
-                                        - padding: 12px
-                                        - text-box: trim-both cap alphabetic
-                                        - overflow: hidden
-                                profiles: 
-                                  card:
-                                    type: custom:button-card
-                                    styles:
-                                      grid:
-                                        - grid-template-columns: max-content
-                                        - grid-template-rows: min-content
-                                        - grid-template-areas: "\"one two\""
-                                        - align-items: start
-                                        - column-gap: 5px
-                                      card:
-                                        - background-color: transparent
-                                        - width: 120%
-                                        - height: 50px
-                                        - margin: 5px 0px 0px 10px
-                                        - border: none
-                                    custom_fields:
-                                      one:
-                                        card:
-                                          type: custom:button-card
-                                          template: person_status_badge
-                                          variables:
-                                            person_entity: person.user_1
-                                            icon_sensor: sensor.user-1_location_icon
-                                            color_sensor: sensor.user-1_location_color
-                                      two:
-                                        card:
-                                          type: custom:button-card
-                                          template: person_status_badge
-                                          variables:
-                                            person_entity: person.user_2
-                                            icon_sensor: sensor.user-2_location_icon
-                                            color_sensor: sensor.user-2_location_color
-                              grid_options:
-                                columns: full
+                              template: person_status_badge
+                              variables:
+                                person_entity: person.user_1
+                                icon_sensor: sensor.user-1_location_icon
+                                color_sensor: sensor.user-1_location_color
+                          two:
+                            card:
+                              type: custom:button-card
+                              template: person_status_badge
+                              variables:
+                                person_entity: person.user_2
+                                icon_sensor: sensor.user-2_location_icon
+                                color_sensor: sensor.user-2_location_color
+                  grid_options:
+                    columns: full
         column_span: 10
       - type: grid
       - type: grid
       - type: grid
       - type: grid
       - type: grid
-
-  - type: sections 
+  - type: sections
     title: Plan
     path: plan
     icon: mdi:view-dashboard-edit
