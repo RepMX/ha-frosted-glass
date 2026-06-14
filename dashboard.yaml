@@ -66,7 +66,7 @@ button_card_templates:
                 img_cell:
                   - background-color: |
                       [[[ 
-                        const loc_sensor = states[variables.colour_sensor];
+                        const loc_sensor = states[variables.color_sensor];
                         if (!loc_sensor || !loc_sensor.state || ['unknown', 'unavailable'].includes(loc_sensor.state)) {
                           return '#808080';
                         }
@@ -572,7 +572,39 @@ views:
                                         - padding: 12px
                                         - text-box: trim-both cap alphabetic
                                         - overflow: hidden
-                                profiles: ""
+                                profiles: 
+                                  card:
+                                    type: custom:button-card
+                                    styles:
+                                      grid:
+                                        - grid-template-columns: max-content
+                                        - grid-template-rows: min-content
+                                        - grid-template-areas: "\"one two\""
+                                        - align-items: start
+                                        - column-gap: 5px
+                                      card:
+                                        - background-color: transparent
+                                        - width: 120%
+                                        - height: 50px
+                                        - margin: 5px 0px 0px 10px
+                                        - border: none
+                                    custom_fields:
+                                      one:
+                                        card:
+                                          type: custom:button-card
+                                          template: person_status_badge
+                                          variables:
+                                            person_entity: person.user_1
+                                            icon_sensor: sensor.user-1_location_icon
+                                            color_sensor: sensor.user-1_location_color
+                                      two:
+                                        card:
+                                          type: custom:button-card
+                                          template: person_status_badge
+                                          variables:
+                                            person_entity: person.user_2
+                                            icon_sensor: sensor.user-2_location_icon
+                                            color_sensor: sensor.user-2_location_color
                               grid_options:
                                 columns: full
         column_span: 10
