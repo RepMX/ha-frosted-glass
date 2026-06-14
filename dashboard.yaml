@@ -852,51 +852,6 @@ views:
                                       state: Thermostat
                             - type: vertical-stack
                               cards:
-                                - type: conditional
-                                  conditions:
-                                    - conditions: state
-                                      entity: input_select.column_b2
-                                      state: Sports
-                                  card:
-                                    type: custom:swipe-card
-                                    parameters:
-                                      allowTouchMove: true
-                                      autoHeight: true
-                                      height: 375
-                                      effect: coverflow
-                                      direction: vertical
-                                      spaceBetween: 0
-                                      coverflowEffect:
-                                        rotate: 0
-                                        stretch: 0
-                                        depth: 100
-                                        modifier: 0
-                                        slideShadows: true
-                                      scrollbar:
-                                        hide: true
-                                        draggable: true
-                                        snapOnRelease: true
-                                    cards:
-                                      - type: custom:auto-entities
-                                        card:
-                                          type: vertical-stack
-                                        card_param: cards
-                                        filter:
-                                          include:
-                                            - entity_id: sensor.*
-                                              attributes:
-                                                league: AFL
-                                                team_homeaway: home
-                                              state: IN
-                                              options:
-                                                type: custom:button-card
-                                                template: sports_tall
-                                                entity: this.entity_id
-                                        card_mod:
-                                          styles: |
-                                            ha-card {
-                                              max-height: 375px;
-                                              margin-bottom: 10px !important;
                                 - type: custom:button-card
                                   template: weather
                                   visibility:
@@ -957,6 +912,12 @@ views:
                                     - condition: state
                                       entity: input_select.column_b2
                                       state: Thermostat
+                                - type: custom:button-card
+                                  template: sports
+                                  visibility:
+                                    - condition: state
+                                      entity: input_select.column_b2
+                                      state: Sports
                             - type: vertical-stack
                               cards:
                                 - type: custom:button-card
@@ -1086,6 +1047,51 @@ views:
                                       state: Thermostat
                             - type: vertical-stack
                               cards:
+                                - type: conditional
+                                  conditions:
+                                    - conditions: state
+                                      entity: input_select.column_h1
+                                      state: Sports
+                                  card:
+                                    type: custom:swipe-card
+                                    parameters:
+                                      allowTouchMove: true
+                                      autoHeight: true
+                                      height: 375
+                                      effect: coverflow
+                                      direction: vertical
+                                      spaceBetween: 0
+                                      coverflowEffect:
+                                        rotate: 0
+                                        stretch: 0
+                                        depth: 100
+                                        modifier: 0
+                                        slideShadows: true
+                                      scrollbar:
+                                        hide: true
+                                        draggable: true
+                                        snapOnRelease: true
+                                    cards:
+                                      - type: custom:auto-entities
+                                        card:
+                                          type: vertical-stack
+                                        card_param: cards
+                                        filter:
+                                          include:
+                                            - entity_id: sensor.*
+                                              attributes:
+                                                league: AFL
+                                                team_homeaway: home
+                                              state: IN
+                                              options:
+                                                type: custom:button-card
+                                                template: sports_tall
+                                                entity: this.entity_id
+                                        card_mod:
+                                          styles: |
+                                            ha-card {
+                                              max-height: 375px;
+                                              margin-bottom: 10px !important;
                                 - type: custom:button-card
                                   template: weather
                                   visibility:
@@ -1122,12 +1128,6 @@ views:
                                     - condition: state
                                       entity: input_select.column_h1
                                       state: Recent Activity
-                                - type: custom:button-card
-                                  template: sports
-                                  visibility:
-                                    - condition: state
-                                      entity: input_select.column_h1
-                                      state: Sports
                                 - type: custom:button-card
                                   template: health
                                   visibility:
