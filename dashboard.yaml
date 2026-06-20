@@ -4,6 +4,507 @@ kiosk_mode:
   hide_header: "{{ is_state('input_boolean.standby_kiosk_mode', 'on') }}"
   hide_sidebar: "{{ is_state('input_boolean.standby_kiosk_mode', 'on') }}"
 button_card_templates:
+  day_selector_button:
+    show_name: true
+    show_icon: false
+    show_state: false
+    tap_action:
+      action: toggle
+    extra_styles: |
+      :host, #aspect-ratio {
+        max-width: none !important;
+        justify-self: center !important;
+        width: 100% !important;
+      }
+    styles:
+      grid:
+        - grid-template-areas: "\"n\""
+        - grid-template-columns: 1fr
+        - grid-template-rows: 1fr
+      card:
+        - background-color: transparent
+        - height: 36px
+        - width: 100%
+        - box-sizing: border-box
+        - padding: 0px
+        - align-content: center
+        - justify-content: center
+        - align-self: center
+      name:
+        - font-family: "'Dongle', sans-serif"
+        - box-sizing: border-box
+        - width: 100%
+        - text-align: center
+        - justify-self: center
+        - align-self: center
+        - padding: 5px
+        - margin: 0px
+        - font-size: 26px
+        - font-weight: 300
+        - text-box: trim-both cap alphabetic
+        - color: |
+            [[[ 
+              return entity.state === 'on' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(255, 255, 255, 0.7)'; 
+            ]]]
+    card_mod:
+      style:
+        .: |
+          ha-card {
+            font-family: "Dongle", sans-serif;
+            font-weight: 300;
+            background: {% if is_state(config.entity, 'on') %} linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.22) 100%) {% else %} linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 100%) {% endif %} !important;
+            backdrop-filter: blur(20px) saturate(120%) brightness(95%) !important;
+            -webkit-backdrop-filter: blur(20px) saturate(120%) brightness(95%) !important;
+            -webkit-tap-highlight-color: transparent !important;
+            box-shadow: inset -2px 2px 6px rgba(0, 0, 0, 0.05), inset 1px -1px 6px rgba(255, 255, 255, 0.02), 1px 4px 10px rgba(0, 0, 0, 0.15) !important;
+            border: none !important;
+            border-radius: 30px !important;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.2s ease, filter 0.2s ease;
+          }
+
+          ha-card:hover {
+            filter: brightness(1.1);
+          }
+
+          :host {
+            width: 100% !important;
+            box-sizing: border-box !important;
+            display: block;
+            position: relative; 
+            margin: 0px !important;
+            cursor: pointer;
+            overflow: visible !important;
+            transition: transform 0.2s ease, filter 0.2s ease;
+          }
+          :host(:active) {
+            transform: scale(0.95);
+          }
+
+          ha-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 30px;
+            -webkit-backdrop-filter: blur(50px);
+            padding: 1px;
+            background: linear-gradient(60deg, 
+                rgba(255,255,255,0.0) 0%,
+                rgba(255,255,255,0.25) 49%,
+                rgba(255,255,255,0.25) 51%,
+                rgba(255,255,255,0.0) 100%);
+            -webkit-mask:
+              linear-gradient(#fff 0 0) content-box,
+              linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            z-index: 2; 
+            filter: saturate(140%);
+            pointer-events: none;
+          }
+
+          :host::after {
+            content: "";
+            background: linear-gradient(180deg, rgba(255,255,255, 0.05) 20%, rgba(255,255,255, 0.0) 100%); 
+            position: absolute;
+            inset: 0;
+            border-radius: 30px;
+            box-shadow: inset -4px 5px 8px rgba(0, 0, 0, 0.05);
+            z-index: -1;
+            -webkit-backdrop-filter: blur(20px) saturate(110%) brightness(90%);
+            filter: drop-shadow(1px 2px 5px rgba(0, 0, 0, 0.1)); 
+            pointer-events: none;
+          }
+  target_selector_button:
+    show_name: true
+    show_icon: true
+    show_state: false
+    max_columns: 4
+    tap_action:
+      action: toggle
+    extra_styles: |
+      :host, #aspect-ratio {
+        max-width: none !important;
+        justify-self: center !important;
+        width: 100% !important;
+      }
+    state:
+      - value: "off"
+        icon: |-
+          [[[ 
+            const area = entity.entity_id.split('_').pop();
+            const map = { master: 'bedroom', kids: 'bedroom_2', living: 'living_room', dining: 'dining', kitchen: 'kitchen', office: 'office' };
+            return hass.areas[map[area] || area]?.icon ;
+          ]]]
+      - value: "on"
+        icon: |-
+          [[[ 
+            const area = entity.entity_id.split('_').pop();
+            const map = { master: 'bedroom', kids: 'bedroom_2', living: 'living_room', dining: 'dining', kitchen: 'kitchen', office: 'office' };
+            return hass.areas[map[area] || area]?.icon ;
+          ]]]
+        styles:
+          card:
+            - background: rgba(255,255,255,0.3) !important
+    styles:
+      grid:
+        - grid-template-areas: "\"i n\" \"i s\""
+        - grid-template-columns: max-content 1fr
+        - grid-template-rows: 1fr
+      card:
+        - background-color: transparent
+        - height: 60px
+        - width: 100%
+        - box-sizing: border-box
+        - padding: 0px 10px
+        - align-content: start
+        - justify-content: start
+        - align-self: start
+      name:
+        - font-family: "'Dongle', sans-serif"
+        - box-sizing: border-box
+        - width: 100%
+        - text-align: left
+        - justify-self: start
+        - padding: 5px 15px
+        - margin: 0px
+        - font-size: 27px
+        - font-weight: 300
+        - color: rgba(255,255,255,0.9)
+        - text-box: trim-both cap alphabetic
+      img_cell:
+        - justify-self: start
+        - background-color: "[[[ return variables.icon_color ]]]"
+        - width: 40px
+        - height: 40px
+        - border-radius: 50px
+        - border: 1px solid rgba(255,255,255,0.3)
+      icon:
+        - color: rgba(255,255,255,1)
+        - width: 25px
+    card_mod:
+      style:
+        .: |
+          ha-card {
+            font-family: "Dongle", sans-serif;
+            font-weight: 300;
+            background: {% if is_state(config.entity, 'on') %} linear-gradient(135deg, rgba(255, 255, 255, 0.32) 0%, rgba(255, 255, 255, 0.12) 100%) {% else %} linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.03) 100%) {% endif %} !important;
+            backdrop-filter: blur(30px) saturate(120%) brightness(95%) !important;
+            -webkit-backdrop-filter: blur(30px) saturate(120%) brightness(95%) !important;
+            -webkit-tap-highlight-color: transparent !important;
+            box-shadow: inset -6px 6px 12px rgba(0, 0, 0, 0.08), inset 3px -3px 12px rgba(255, 255, 255, 0.03), 3px 10px 25px rgba(0, 0, 0, 0.2) !important;
+            border: none !important;
+            border-radius: 30px !important;
+            position: relative;
+            z-index: 1;
+          }
+
+          ha-card:hover {
+            filter: brightness(1.1);
+          }
+
+          :host {
+            width: 100% !important;
+            box-sizing: border-box !important;
+            display: block;
+            position: relative; 
+            margin: 4px 10px 4px 10px;
+            cursor: pointer;
+            transition: transform 0.2s ease, filter 0.2s ease;
+            overflow: visible !important;
+          }
+
+          :host(:active) {
+            transform: scale(0.95);
+          }
+
+          ha-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 30px;
+            backdrop-filter: blur(50px);
+            -webkit-backdrop-filter: blur(50px);
+            padding: 0.1rem;
+            background: linear-gradient(60deg, 
+                rgba(255,255,255,0.0) 0%,
+                rgba(255,255,255,0.2) 49%,
+                rgba(255,255,255,0.2) 51%,
+                rgba(255,255,255,0.0) 100%);
+            -webkit-mask:
+              linear-gradient(#fff 0 0) content-box,
+              linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            z-index: 2; 
+            filter: saturate(140%);
+            pointer-events: none;
+          }
+
+          :host::after {
+            content: "";
+            background: linear-gradient(180deg, rgba(255,255,255, 0.1) 20%, rgba(255,255,255, 0.0) 100%); 
+            position: absolute;
+            inset: 0;
+            border-radius: 30px;
+            box-shadow: inset -8px 10px 15px rgba(0, 0, 0, 0.1);
+            z-index: -1;
+            backdrop-filter: blur(30px) saturate(110%) brightness(90%);
+            -webkit-backdrop-filter: blur(30px) saturate(110%) brightness(90%);
+            filter: drop-shadow(3px 3px 10px rgba(0, 0, 0, 0.2)); 
+          }
+  alarm_list_slot:
+    entity: sensor.alarm_clock_items
+    show_name: false
+    show_state: false
+    show_icon: false
+    tap_action:
+      action: call-service
+      service: todo.update_item
+      target:
+        entity_id: todo.alarm_clock_list
+      data:
+        item: |
+          [[[
+            const alarms = entity && entity.attributes ? entity.attributes.alarms : null;
+            return (alarms && alarms[variables.slot_index]) ? alarms[variables.slot_index].uid : '';
+          ]]]
+        status: |
+          [[[
+            const alarms = entity && entity.attributes ? entity.attributes.alarms : null;
+            const alarm = alarms && alarms[variables.slot_index];
+            return (alarm && alarm.status === 'needs_action') ? 'completed' : 'needs_action';
+          ]]]
+    extra_styles: |
+      :host, #aspect-ratio {
+        max-width: none !important;
+        justify-self: center !important;
+      }
+      [[[
+        const alarms = entity && entity.attributes ? entity.attributes.alarms : null;
+        if (!alarms || alarms.length <= variables.slot_index) {
+          return ':host { display: none !important; }';
+        }
+        return '';
+      ]]]
+    styles:
+      card:
+        - display: |
+            [[[ 
+              const alarms = entity && entity.attributes ? entity.attributes.alarms : null;
+              return (alarms && alarms.length > variables.slot_index) ? 'block' : 'none';
+            ]]]
+        - background-color: transparent
+        - padding: 12px 14px 12px 20px
+        - margin: 0px 0px 8px 0px
+        - border: none
+        - pointer-events: auto
+      grid:
+        - grid-template-areas: "\"info action\""
+        - grid-template-columns: 1fr auto
+        - align-items: center
+    custom_fields:
+      info: |
+        [[[
+          const alarms = entity && entity.attributes ? entity.attributes.alarms : null;
+          if (!alarms || alarms.length <= variables.slot_index) return '';
+          const alarm = alarms[variables.slot_index];
+          if (!alarm) return '';
+          
+          let meta = { days: [], targets: [] };
+          try {
+            meta = JSON.parse(alarm.description);
+          } catch(e) {}
+          
+          // Phrasing execution loops
+          const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+          const weekends = ['Saturday', 'Sunday'];
+          let frequencyText = "Once";
+          
+          if (meta && meta.days && meta.days.length > 0) {
+            const includesAllWeekdays = weekdays.every(d => meta.days.includes(d));
+            const includesAllWeekends = weekends.every(d => meta.days.includes(d));
+            
+            if (includesAllWeekdays && includesAllWeekends) {
+              frequencyText = "Everyday";
+            } 
+            else if (includesAllWeekdays) {
+              const remaining = meta.days.filter(d => !weekdays.includes(d));
+              if (remaining.length === 0) {
+                frequencyText = "Every Weekdays";
+              } else {
+                frequencyText = `Every Weekdays and ${remaining[0]}`;
+              }
+            } 
+
+            else if (includesAllWeekends) {
+              const dayOrder = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+              const remaining = meta.days.filter(d => !weekends.includes(d))
+                                          .sort((a, b) => dayOrder.indexOf(a) - dayOrder.indexOf(b));
+              if (remaining.length === 0) {
+                frequencyText = "Every Weekends";
+              } else if (remaining.length === 1) {
+                frequencyText = `Every Weekends and ${remaining[0]}`;
+              } else if (remaining.length === 2) {
+                frequencyText = `Every Weekends, ${remaining[0]}, and ${remaining[1]}`;
+              } else {
+                const lastDay = remaining.pop();
+                frequencyText = `Every Weekends, ${remaining.join(', ')}, and ${lastDay}`;
+              }
+            } 
+
+            else {
+              const dayOrder = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+              const sortedDays = [...meta.days].sort((a, b) => dayOrder.indexOf(a) - dayOrder.indexOf(b));
+              
+              const pluralDays = sortedDays.map(d => d + 's');
+              if (pluralDays.length === 1) {
+                frequencyText = `Every ${pluralDays[0]}`;
+              } else if (pluralDays.length === 2) {
+                frequencyText = `Every ${pluralDays[0]} and ${pluralDays[1]}`;
+              } else {
+                const lastDay = pluralDays.pop();
+                frequencyText = `Every ${pluralDays.join(', ')}, and ${lastDay}`;
+              }
+            }
+          }
+
+          // Dynamic Opacities for Text Fields based on Alarm Status
+          const isComp = alarm.status === 'completed';
+          const colorTime = isComp ? 'rgba(255,255,255,0.35)' : 'rgba(255,255,255,0.9)';
+          const colorFreq = isComp ? 'rgba(255,255,255,0.25)' : 'rgba(255,255,255,0.7)';
+          const colorTarget = isComp ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.4)';
+
+          const targetsText = (meta && meta.targets && meta.targets.length > 0) 
+            ? `<div style="display: flex; align-items: center; gap: 4px; font-size: 16px; color: ${colorTarget}; overflow: hidden;">
+                 <ha-icon icon="mdi:map-marker" style="--mdc-icon-size: 16px; flex-shrink: 0; color: ${colorTarget};"></ha-icon>
+                 <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-box: trim-both cap alphabetic; padding: 5px 0px">${meta.targets.join(', ')}</span>
+               </div>`
+            : '';
+
+          return `
+            <div style="display: flex; flex-direction: row; align-items: center; gap: 12px; width: 100%; overflow: hidden;">
+              <div style="font-size: 44px; font-weight: 300; color: ${colorTime}; white-space: nowrap; text-box: trim-both cap alphabetic; padding: 5px 0px">
+                ${alarm.summary}
+              </div>
+              
+              <div style="font-size: 18px; font-weight: 300; color: ${colorFreq}; white-space: nowrap; text-box: trim-both cap alphabetic; padding: 5px 0px">
+                ${frequencyText}
+              </div>
+              
+              ${targetsText}
+            </div>
+          `;
+        ]]]
+      action:
+        card:
+          type: custom:button-card
+          icon: mdi:delete-outline
+          show_name: false
+          styles:
+            card:
+              - background: transparent
+              - border: none
+              - box-shadow: none
+              - width: 36px
+              - height: 36px
+            icon:
+              - color: rgba(255, 255, 255, 0.4)
+              - width: 22px
+          tap_action:
+            action: call-service
+            service: todo.remove_item
+            target:
+              entity_id: todo.alarm_clock_list
+            data:
+              item: |
+                [[[
+                  const s = states['sensor.alarm_clock_items'];
+                  const alarms = s && s.attributes ? s.attributes.alarms : null;
+                  return (alarms && alarms[variables.slot_index]) ? alarms[variables.slot_index].uid : '';
+                ]]]
+    card_mod:
+      style:
+        .: >
+          {% set index = config.variables.slot_index | int %}
+
+          {% set alarms = state_attr('sensor.alarm_clock_items', 'alarms') %}
+
+          {% set is_completed = alarms and alarms[index] is defined and
+          alarms[index].status == 'completed' %}
+
+          ha-card {
+            font-family: "Dongle", sans-serif;
+            font-weight: 300;
+            background: {% if is_completed %} linear-gradient(135deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 100%) {% else %} linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.03) 100%) {% endif %} !important;
+            backdrop-filter: blur(30px) saturate(120%) brightness(95%) !important;
+            -webkit-backdrop-filter: blur(30px) saturate(120%) brightness(95%) !important;
+            -webkit-tap-highlight-color: transparent !important;
+            transition: transform 0.2s ease, filter 0.2s ease, background-color 0.15s ease;
+            box-shadow: inset -6px 6px 12px rgba(0, 0, 0, 0.08), inset 3px -3px 12px rgba(255, 255, 255, 0.03), {% if is_completed %} 3px 10px 25px rgba(0, 0, 0, 0.05) {% else %} 3px 10px 25px rgba(0, 0, 0, 0.2) {% endif %} !important;
+            border: none !important;
+            border-radius: 30px !important;
+            position: relative;
+            z-index: 1;
+          }
+
+
+          :host {
+            width: 100% !important;
+            box-sizing: border-box !important;
+            display: block;
+            position: relative; 
+            margin: 4px 10px 4px 10px;
+            cursor: pointer;
+            transition: transform 0.2s ease, filter 0.2s ease;
+            overflow: visible !important;
+          }
+
+
+          ha-card:active {
+            transform: scale(0.98);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.08) 100%) !important;
+          }
+
+
+          :host:has(ha-card:active)::after {
+            transform: scale(0.98) !important;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.08) 100%) !important;
+          }
+
+
+          ha-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 30px;
+            backdrop-filter: blur(50px);
+            -webkit-backdrop-filter: blur(50px);
+            padding: 0.1rem;
+            background: {% if is_completed %} linear-gradient(60deg, rgba(255,255,255,0.0) 0%, rgba(255,255,255,0.04) 50%, rgba(255,255,255,0.0) 100%) {% else %} linear-gradient(60deg, rgba(255,255,255,0.0) 0%, rgba(255,255,255,0.2) 49%, rgba(255,255,255,0.2) 51%, rgba(255,255,255,0.0) 100%) {% endif %};
+            -webkit-mask:
+              linear-gradient(#fff 0 0) content-box,
+              linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            z-index: 2; 
+            filter: saturate(140%);
+            pointer-events: none;
+          }
+
+
+          :host::after {
+            content: "";
+            background: linear-gradient(180deg, rgba(255,255,255, 0.1) 20%, rgba(255,255,255, 0.0) 100%); 
+            position: absolute;
+            inset: 0;
+            border-radius: 30px;
+            z-index: -1;
+            backdrop-filter: blur(30px) saturate(110%) brightness(90%);
+            -webkit-backdrop-filter: blur(30px) saturate(110%) brightness(90%);
+            filter: drop-shadow(3px 3px 10px rgba(0, 0, 0, 0.2)); 
+          }
   person_status_badge:
     styles:
       grid:
@@ -44,11 +545,28 @@ button_card_templates:
             - type: custom:button-card
               icon: |
                 [[[ 
-                  const loc_sensor = states[variables.icon_sensor];
-                  if (!loc_sensor || !loc_sensor.state || ['unknown', 'unavailable'].includes(loc_sensor.state)) {
-                    return 'mdi:home'; 
+                  const person = states[variables.person_entity];
+                  if (!person || ['unknown', 'unavailable'].includes(person.state)) {
+                    return 'mdi:help'; 
                   }
-                  return loc_sensor.state;
+                  
+                  const loc = person.state;
+                  const src = person.attributes.source;
+                  
+                  if (loc === 'not_home') {
+                    // Away: Look up the icon assigned directly to the reporting hardware device
+                    return (src && states[src] && states[src].attributes.icon) ? states[src].attributes.icon : 'mdi:help';
+                  } else {
+                    // In a Zone: Dynamically fetch the icon configured in that Zone's settings
+                    const zone_entity = 'zone.' + loc;
+                    const zone_icon = (states[zone_entity] && states[zone_entity].attributes.icon) ? states[zone_entity].attributes.icon : null;
+                    if (zone_icon) return zone_icon;
+                    
+                    // Fallback defaults if the specific zone has no icon defined
+                    if (loc === 'home') return 'mdi:home';
+                    if (loc === 'office') return 'mdi:office-building';
+                    return 'mdi:map-marker';
+                  }
                 ]]]
               show_name: false
               show_state: false
@@ -62,18 +580,33 @@ button_card_templates:
                   - border: none
                   - align-self: center
                   - justify-self: center
-                  - padding: 0px 0px 0px 0px
+                  - padding: 0px
+                  - box-shadow: none
+                  - background-color: transparent
+                  - ha-card-border-width: 0px
+                  - outline: none
                 img_cell:
                   - background-color: |
                       [[[ 
-                        const loc_sensor = states[variables.color_sensor];
-                        if (!loc_sensor || !loc_sensor.state || ['unknown', 'unavailable'].includes(loc_sensor.state)) {
+                        const person = states[variables.person_entity];
+                        if (!person || ['unknown', 'unavailable'].includes(person.state)) {
                           return '#808080';
                         }
-                        return loc_sensor.state;
+                        
+                        const loc = person.state;
+                        const src = person.attributes.source;
+                        
+                        // Check if the current tracking device is online and actively updating
+                        if (src && states[src] && !['unknown', 'unavailable'].includes(states[src].state)) {
+                          if (loc === 'home') return 'var(--my-color-one)';
+                          if (loc === 'office') return 'var(--my-color-two)';
+                          if (loc === 'not_home') return 'var(--my-color-five)';
+                          return 'var(--my-color-four)'; // Any custom zone (gym, school, store)
+                        }
+                        return '#808080'; // Grey out badge if the device tracker goes offline
                       ]]]
                 icon:
-                  - width: 80%
+                  - width: 70%
   divider:
     type: custom:button-card
     show_name: false
@@ -326,22 +859,12 @@ button_card_templates:
                 show_name: false
                 show_state: true
                 show_icon: true
-                state:
-                  - value: "0"
-                    icon: mdi:lightbulb
-                    styles:
-                      card:
-                        - background-color: rgba(0, 0, 0, 0.1)
-                      icon:
-                        - color: rgba(255, 255, 255, 0.3)
-                  - value: unavailable
-                    styles:
-                      card:
-                        - background: transparent
-                      icon:
-                        - color: transparent
-                      state:
-                        - color: transparent
+                state_display: |
+                  [[[
+                    if (!entity || entity.state === 'unavailable' || entity.state === 'unknown') return '-';
+                    if (entity.state === 'off') return '0';
+                    return entity.state;
+                  ]]]
                 styles:
                   grid:
                     - grid-template-areas: "\"i s\""
@@ -355,7 +878,12 @@ button_card_templates:
                   icon:
                     - width: 12px
                     - height: 12px
-                    - color: white
+                    - color: |
+                        [[[
+                          if (!entity || entity.state === 'unavailable' || entity.state === 'unknown') return 'rgba(255, 255, 255, 0.2)';
+                          if (entity.state === '0' || entity.state === 'off') return 'rgba(255, 255, 255, 0.3)';
+                          return 'white';
+                        ]]]
                   state:
                     - color: white
                     - font-size: 12px
@@ -364,7 +892,13 @@ button_card_templates:
                     - width: 35px
                     - height: 25px
                     - padding: 0px
-                    - background-color: "#ff9800"
+                    - border: none
+                    - background-color: |
+                        [[[
+                          if (!entity || entity.state === 'unavailable' || entity.state === 'unknown') return 'rgba(128, 128, 128, 0.15)';
+                          if (entity.state === '0' || entity.state === 'off') return 'rgba(128, 128, 128, 0.3)';
+                          return '#ff9800';
+                        ]]]
             two:
               card:
                 type: custom:button-card
@@ -431,6 +965,7 @@ views:
     path: dashboard
     icon: mdi:tablet-dashboard
     theme: liquid-glass
+    background: center / cover no-repeat fixed url('/local/img/anniroenkae-14016239.webp')
     max_columns: 10
     layout:
       grid-rows: auto
@@ -487,6 +1022,9 @@ views:
                         show_name: true
                         show_icon: false
                         show_state: false
+                        tap_action:
+                          action: navigate
+                          navigation_path: ./alarm-clock
                         name: |
                           [[[
                             const clock = states['sensor.live_clock'];
@@ -507,7 +1045,7 @@ views:
                             color: rgba(220,220,220,0.6);
                             padding: 7px 0px 7px 7px;
                             transform: translateY(-72%);
-                            width: 1.3em;
+                            width: 0.88em;
                             text-align: left;
                           }
                         styles:
@@ -515,7 +1053,7 @@ views:
                             - background: transparent
                             - border: none
                             - box-shadow: none
-                            - margin: 0px
+                            - margin: 0px 10px 0px 0px
                             - padding: 0px
                             - width: max-content
                             - height: max-content
@@ -525,7 +1063,7 @@ views:
                             - font-size: 96px
                             - font-weight: 300
                             - color: rgba(255,255,255,0.9)
-                            - padding: 12px
+                            - padding: 12px 0px 12px 12px
                             - text-box: trim-both cap alphabetic
                             - overflow: hidden
                     profiles:
@@ -543,6 +1081,7 @@ views:
                             - width: 120%
                             - height: 50px
                             - margin: 0px
+                            - padding: 8px
                             - border: none
                         custom_fields:
                           one:
@@ -551,18 +1090,50 @@ views:
                               template: person_status_badge
                               variables:
                                 person_entity: person.user_1
-                                icon_sensor: sensor.user-1_location_icon
-                                color_sensor: sensor.user-1_location_color
                           two:
                             card:
                               type: custom:button-card
                               template: person_status_badge
                               variables:
                                 person_entity: person.user_2
-                                icon_sensor: sensor.user-2_location_icon
-                                color_sensor: sensor.user-2_location_color
                   grid_options:
                     columns: full
+          - type: custom:button-card
+            show_state: false
+            show_name: false
+            show_icon: false
+            styles:
+              card:
+                - visibility: hidden
+            card_mod:
+              style: |
+                :host::after {
+                  content: "" !important;
+                  position: fixed !important;
+                  top: 0 !important;
+                  left: 0 !important;
+                  width: 100vw !important;
+                  height: 100vh !important;
+                  z-index: 9999 !important; 
+                  pointer-events: none !important;
+                  {% set hour = now().hour %}
+                  {% if 5 <= hour < 12 %}
+                    backdrop-filter: brightness(100%) contrast(100%) !important;
+                    -webkit-backdrop-filter: brightness(100%) contrast(100%) !important;
+                  {% elif 12 <= hour < 18 %}
+                    background: linear-gradient(rgba(255, 215, 110, 0.07), rgba(240, 130, 10, 0.42)) !important;
+                    backdrop-filter: brightness(98%) contrast(102%) !important;
+                    -webkit-backdrop-filter: brightness(98%) contrast(102%) !important !important;
+                  {% elif 18 <= hour < 20 %}
+                    background: linear-gradient(rgba(255, 240, 0, 0.11), rgba(30, 4, 70, 0.65)) !important;
+                    backdrop-filter: brightness(80%) contrast(104%) !important;
+                    -webkit-backdrop-filter: brightness(80%) contrast(104%) !important;
+                  {% else %}
+                    background: linear-gradient(rgba(90, 0, 80, 0.18), rgba(2, 0, 9, 0.9)) !important;
+                    backdrop-filter: brightness(70%) contrast(108%) !important;
+                    -webkit-backdrop-filter: brightness(70%) contrast(108%) !important;
+                  {% endif %}
+                }
         column_span: 10
       - type: grid
         cards:
@@ -1471,6 +2042,458 @@ views:
                   background-color: transparent
         column_span: 10
       - type: grid
+        cards:
+          - type: custom:button-card
+            styles:
+              grid:
+                - grid-template-areas: "\"statuses assist space\""
+                  align-content: center
+                  align-items: center
+              card:
+                - background-color: transparent
+                  border-radius: 0px
+                  height: 80px
+                  width: 1300px
+                  padding: 10px 5px 5px 5px
+                  margin: 0px 25px -5px 5px
+                  border: none
+            custom_fields:
+              statuses:
+                card:
+                  type: horizontal-stack
+                  cards:
+                    - type: custom:button-card
+                      entity: sensor.all_lights_counter
+                      show_state: false
+                      show_name: true
+                      show_icon: true
+                      max_columns: 4
+                      name: |
+                        [[[ 
+                          const ent = states['sensor.all_lights_counter'];
+                          if (!ent) return "Loading";
+                          const count = ent.state;
+                          if (count === '0') {
+                            return "All Lights OFF";
+                          } else if (parseInt(count, 10) === 1) {
+                            return `${count} Light ON`;
+                          } else if (parseInt(count, 10) > 1) {
+                            return `${count} Lights ON`;
+                          } else {
+                            return `Unavailable`;
+                          }
+                        ]]]
+                      icon: |
+                        [[[ 
+                          const ent = states['sensor.all_lights_counter'];
+                          if (!ent) return `mdi:lightbulb-question`;
+                          const count = ent.state;
+                          if (count === '0') {
+                            return `mdi:lightbulb-outline`;
+                          } else if (parseInt(count, 10) === 1) {
+                            return `mdi:lightbulb`;
+                          } else if (parseInt(count, 10) > 1) {
+                            return `mdi:lightbulb-group`;
+                          } else {
+                            return `mdi:lightbulb-question`;
+                          }
+                        ]]]
+                      tap_action:
+                        action: navigate
+                        navigation_path: "#lights"
+                      styles:
+                        grid:
+                          - grid-template-areas: "\"i n\""
+                          - grid-template-columns: max-content 1fr
+                          - grid-template-rows: 1fr
+                        card:
+                          - background-color: transparent
+                          - height: 60px
+                          - width: 100%
+                          - padding: 0px 11px 0px 10px
+                          - margin: 0px
+                          - align-content: start
+                          - justify-content: start
+                          - align-self: start
+                          - opacity: 0.9
+                        name:
+                          - box-sizing: border-box
+                          - width: 100%
+                          - text-align: left
+                          - justify-self: start
+                          - padding: 5px 15px
+                          - margin: 0px
+                          - font-size: 27px
+                          - font-weight: 300
+                          - color: rgba(255,255,255,0.9)
+                          - text-box: trim-both cap alphabetic
+                        img_cell:
+                          - background-color: |
+                              [[[ 
+                                const ent = states['sensor.all_lights_counter'];
+                                if (!ent) return `rgba(255,255,255,0.1)`;
+                                const count = ent.state;
+                                if (count === '0') {
+                                  return `var(--my-color-two)`;
+                                } else if (parseInt(count, 10) <= 3 && parseInt(count, 10) > 0) {
+                                  return `var(--my-color-five)`;
+                                } else if (parseInt(count, 10) > 3) {
+                                  return `var(--my-color-six)`;
+                                } else {
+                                  return `rgba(255,255,255,0.1)`;
+                                }
+                              ]]]
+                          - width: 40px
+                          - height: 40px
+                          - border-radius: 50px
+                          - border: 1px solid rgba(255,255,255,0.3)
+                          - box-shadow: inset -3px 3px 10px rgba(0,0,0,0.1)
+                        icon:
+                          - color: white
+                          - width: 25px
+                      card_mod:
+                        class: frosted-glass
+                    - type: custom:button-card
+                      entity: sensor.my_server_status
+                      name: Servers
+                      tap_action:
+                        action: url
+                        url_path: https://api.jedy.cc/apps
+                      show_state: true
+                      state_display: |
+                        [[[
+                          const statObj = states['sensor.my_server_status'];
+                          if (!statObj) return 'Loading...';
+                          
+                          if (statObj.state === 'on') return 'All Online';
+                          if (statObj.state.startsWith('off-')) {
+                            const count = statObj.state.split('-')[1];
+                            return count + (count === '1' ? ' Offline' : ' Server Anomalies');
+                          }
+                          return statObj.state;
+                        ]]]
+                      state:
+                        - value: "on"
+                          icon: mdi:server
+                        - operator: template
+                          value: |
+                            [[[ 
+                              const statObj = states['sensor.my_server_status'];
+                              return statObj && statObj.state.startsWith('off-'); 
+                            ]]]
+                          icon: mdi:server-off
+                          styles:
+                            card:
+                              - transform: scale(0.99)
+                              - opacity: 1
+                            icon:
+                              - color: rgba(255,55,59,1)
+                              - animation: blink 2s ease-in-out infinite;
+                            label:
+                              - color: rgba(255,255,255,0.5)
+                            img_cell:
+                              - background-color: rgba(255,255,255,1)
+                      styles:
+                        grid:
+                          - grid-template-areas: "\"i n\" \"i s\""
+                          - grid-template-columns: max-content 1fr
+                          - grid-template-rows: 1fr
+                        card:
+                          - background-color: transparent
+                          - height: 60px
+                          - width: 100%
+                          - padding: 0px 11px 0px 10px
+                          - margin: 0px
+                          - align-content: start
+                          - justify-content: start
+                          - align-self: start
+                          - opacity: 0.9
+                        name:
+                          - box-sizing: border-box
+                          - width: 100%
+                          - text-align: left
+                          - justify-self: start
+                          - padding: 5px 15px
+                          - margin: "-16px 0px 0px 0px"
+                          - font-size: 27px
+                          - font-weight: 300
+                          - color: rgba(255,255,255,0.9)
+                          - text-box: trim-both cap alphabetic
+                        state:
+                          - box-sizing: border-box
+                          - width: 100%
+                          - text-align: left
+                          - justify-self: start
+                          - padding: 5px 15px
+                          - margin: "-40px 0px 0px 0px"
+                          - font-size: 24px
+                          - font-weight: 300
+                          - color: rgba(255,255,255,0.5)
+                          - text-box: trim-both cap alphabetic
+                        img_cell:
+                          - background-color: rgba(255,255,255,0.1)
+                          - width: 40px
+                          - height: 40px
+                          - border-radius: 50px
+                          - border: 1px solid rgba(255,255,255,0.3)
+                        icon:
+                          - color: var(--my-color-one)
+                          - width: 25px
+                      show_name: true
+                      show_icon: true
+                      max_columns: 4
+                      card_mod:
+                        class: frosted-glass
+                        style: |
+                          ha-card {
+                            background: transparent !important;
+                            background-color: transparent !important;
+                            border: none !important;
+                            box-shadow: none !important;
+                          }
+                    - type: custom:button-card
+                      icon: mdi:clock-digital
+                      name: Set Alarm
+                      tap_action:
+                        action: navigate
+                        navigation_path: ./set-alarm-clock
+                      show_state: false
+                      styles:
+                        grid:
+                          - grid-template-areas: "\"i n\" \"i s\""
+                          - grid-template-columns: max-content 1fr
+                          - grid-template-rows: 1fr
+                        card:
+                          - background-color: transparent
+                          - height: 60px
+                          - width: 100%
+                          - padding: 0px 11px 0px 10px
+                          - margin: 0px
+                          - align-content: start
+                          - justify-content: start
+                          - align-self: start
+                          - opacity: 0.9
+                        name:
+                          - box-sizing: border-box
+                          - width: 100%
+                          - text-align: left
+                          - justify-self: start
+                          - padding: 5px 15px
+                          - margin: 0px
+                          - font-size: 27px
+                          - font-weight: 300
+                          - color: rgba(255,255,255,0.9)
+                          - text-box: trim-both cap alphabetic
+                        state:
+                          - box-sizing: border-box
+                          - width: 100%
+                          - text-align: left
+                          - justify-self: start
+                          - padding: 5px 15px
+                          - margin: "-40px 0px 0px 0px"
+                          - font-size: 24px
+                          - font-weight: 300
+                          - color: rgba(255,255,255,0.5)
+                          - text-box: trim-both cap alphabetic
+                        img_cell:
+                          - background-color: rgba(255,255,255,0.1)
+                          - width: 40px
+                          - height: 40px
+                          - border-radius: 50px
+                          - border: 1px solid rgba(255,255,255,0.3)
+                        icon:
+                          - color: var(--my-color-six)
+                          - width: 25px
+                      show_name: true
+                      show_icon: true
+                      max_columns: 4
+                      card_mod:
+                        class: frosted-glass
+                        style: |
+                          ha-card {
+                            background: transparent !important;
+                            background-color: transparent !important;
+                            border: none !important;
+                            box-shadow: none !important;
+                          }
+                    - type: custom:button-card
+                      name: Kiosk
+                      entity: input_boolean.standby_kiosk_mode
+                      visibility:
+                        - condition: user
+                          users:
+                            - 848b262f9d0140d2ad2a8a8ebc7bdb85
+                      tap_action:
+                        action: call-service
+                        service: input_boolean.toggle
+                        target:
+                          entity_id: input_boolean.standby_kiosk_mode
+                      show_state: true
+                      show_name: true
+                      show_icon: true
+                      state:
+                        - value: "off"
+                          icon: mdi:toggle-switch-off
+                        - value: "on"
+                          icon: mdi:toggle-switch
+                          styles:
+                            card:
+                              - opacity: 1
+                            icon:
+                              - color: rgba(255,55,59,1)
+                            label:
+                              - color: rgba(255,255,255,0.5)
+                            img_cell:
+                              - background-color: rgba(255,255,255,1)
+                      styles:
+                        grid:
+                          - grid-template-areas: "\"i n\" \"i s\""
+                          - grid-template-columns: max-content 1fr
+                          - grid-template-rows: 1fr
+                        card:
+                          - background-color: transparent
+                          - height: 60px
+                          - width: 100%
+                          - padding: 0px 11px 0px 10px
+                          - margin: 0px
+                          - align-content: start
+                          - justify-content: start
+                          - align-self: start
+                          - opacity: 0.9
+                        name:
+                          - box-sizing: border-box
+                          - width: 100%
+                          - text-align: left
+                          - justify-self: start
+                          - padding: 5px 15px
+                          - margin: "-16px 0px 0px 0px"
+                          - font-size: 27px
+                          - font-weight: 300
+                          - color: rgba(255,255,255,0.9)
+                          - text-box: trim-both cap alphabetic
+                        state:
+                          - box-sizing: border-box
+                          - width: 100%
+                          - text-align: left
+                          - justify-self: start
+                          - padding: 5px 15px
+                          - margin: "-40px 0px 0px 0px"
+                          - font-size: 24px
+                          - font-weight: 300
+                          - color: rgba(255,255,255,0.5)
+                          - text-box: trim-both cap alphabetic
+                        img_cell:
+                          - background-color: rgba(255,255,255,0.1)
+                          - width: 40px
+                          - height: 40px
+                          - border-radius: 50px
+                          - border: 1px solid rgba(255,255,255,0.3)
+                        icon:
+                          - color: white
+                          - width: 25px
+                      max_columns: 4
+                      card_mod:
+                        class: frosted-glass
+                        style: |
+                          ha-card {
+                            background: transparent !important;
+                            background-color: transparent !important;
+                            border: none !important;
+                            box-shadow: none !important;
+                          }
+              assist:
+                card:
+                  type: horizontal-stack
+                  cards:
+                    - type: custom:button-card
+                      name: Assist
+                      icon: mdi:microphone
+                      tap_action:
+                        action: assist
+                        start_listening: true
+                        pipeline_id: preferred
+                      state:
+                        - value: listening
+                          styles:
+                            card:
+                              - animation: pulse-glow 1.5s infinite alternate ease-in-out
+                            img_cell:
+                              - animation: blink 2s ease infinite
+                              - background-color: var(--label-badge-blue)
+                        - value: processing
+                          icon: mdi:head-cog
+                          styles:
+                            card:
+                              - animation: pulse-glow 1.5s infinite alternate ease-in-out
+                              - background-color: rgba(49,209,88,0.3)
+                            img_cell:
+                              - animation: blink 2s ease infinite
+                              - background-color: var(--label-badge-green)
+                        - value: responding
+                          icon: mdi:head-dots-horizontal
+                          styles:
+                            card:
+                              - animation: pulse-glow 1.5s infinite alternate ease-in-out
+                              - background-color: rgba(49,209,88,0.3)
+                            img_cell:
+                              - animation: blink 2s ease infinite
+                              - background-color: var(--label-badge-green)
+                      styles:
+                        grid:
+                          - grid-template-areas: "\"i n\""
+                          - grid-template-columns: .5fr 1fr
+                          - grid-template-rows: 1fr
+                        card:
+                          - background-color: transparent
+                          - height: 60px
+                          - width: 100%
+                          - padding: 0px 10px
+                          - margin: 0px
+                          - align-content: start
+                          - justify-content: start
+                          - align-self: start
+                        name:
+                          - box-sizing: border-box
+                          - width: 100%
+                          - text-align: left
+                          - justify-self: start
+                          - padding: 5px 15px
+                          - margin: 0px
+                          - font-size: 27px
+                          - font-weight: 300
+                          - color: rgba(255,255,255,0.9)
+                          - text-box: trim-both cap alphabetic
+                        img_cell:
+                          - background-color: var(--label-badge-blue)
+                            width: 40px
+                            height: 40px
+                            border-radius: 50px
+                            border: 1px solid rgba(255,255,255,0.3)
+                        icon:
+                          - color: white
+                            width: 25px
+                      show_state: false
+                      show_name: true
+                      show_icon: true
+                      max_columns: 4
+                      card_mod:
+                        class: frosted-glass
+                        style: |
+                          ha-card {
+                            background: transparent !important;
+                            background-color: transparent !important;
+                            border: none !important;
+                            box-shadow: none !important;
+                          }
+              space:
+                card:
+                  type: custom:button-card
+                  styles:
+                    card:
+                      - width: 5px
+                      - border: none
+                      - background: transparent
+        column_span: 10
       - type: grid
       - type: grid
   - type: sections
@@ -1552,3 +2575,876 @@ views:
             grid_options:
               columns: 6
               rows: 2
+  - type: sections
+    title: Alarm Clock
+    path: alarm-clock
+    icon: mdi:clock
+    background: center / cover no-repeat fixed url('/local/img/iklas-OPvpcO8Tq3c.webp')
+    sections:
+      - cards:
+          - type: custom:button-card
+            entity: sensor.alarm_clock_greetings
+            name: |
+              [[[ return states['sensor.alarm_greeting'].state ]]]
+            layout_options:
+              grid_columns: full
+              grid_rows: auto
+            tap_action:
+              action: none
+            styles:
+              card:
+                - background: transparent
+                - border: none
+                - box-shadow: none
+                - padding: 50px 0px 0px 12px
+              name:
+                - font-family: "'Dongle', sans-serif"
+                - font-size: 55px
+                - font-weight: 400
+                - color: rgba(255,255,255,0.9)
+                - letter-spacing: 0.5px
+                - line-height: 0.7
+                - justify-self: start
+                - text-align: left
+          - type: custom:button-card
+            entity: sensor.live_clock
+            show_name: false
+            show_state: false
+            show_icon: false
+            tap_action:
+              action: navigate
+              navigation_path: ./
+            hold_action:
+              action: navigate
+              navigation_path: ./set-alarm-clock
+            layout_options:
+              grid_columns: full
+              grid_rows: auto
+            card_mod:
+              class: frosted-glass
+              style: |
+                ha-ripple {
+                  display: none !important;
+                }
+                ha-card::before {
+                  border-radius: 56px !important;
+                }
+                :host::after {
+                  border-radius: 56px !important;
+                }
+            styles:
+              card:
+                - border-radius: 56px !important
+                - height: 300px
+                - width: 620px
+                - display: flex
+                - justify-content: center
+                - align-items: center
+                - position: relative
+                - overflow: visible
+                - margin-bottom: 5px
+              grid:
+                - grid-template-areas: "\"clock_display\""
+              custom_fields:
+                clock_display:
+                  - justify-self: center
+                  - align-self: center
+                  - width: 100%
+                  - height: 100%
+            extra_styles: |
+              .digital-clock-svg {
+                width: 620px;
+                height: 300px;
+                overflow: visible;
+                letter-spacing: -0.7em;
+              }
+              .svg-clock-bg {
+                font-family: 'DigitalFont', sans-serif;
+                font-size: 136px;
+                filter: blur(1px);
+              }
+              .svg-clock-fg {
+                font-family: 'DigitalFont', sans-serif;
+                font-size: 136px;
+                stroke-width: 0.8px;
+                stroke-linejoin: round;
+                /* Applies your translucent blur and drop-shadow styling */
+                filter: blur(0px) drop-shadow(0 0 12px rgba(130, 200, 255, 0.45));
+                transform: translateZ(0); 
+                backface-visibility: hidden;
+              }
+            custom_fields:
+              clock_display: |
+                [[[ 
+                  let timeStr = "00:00";
+                  if (entity && entity.state) {
+                    let parts = entity.state.split(':');
+                    let hh = parts[0].padStart(2, '0');
+                    let mm = parts[1].padStart(2, '0');
+                    timeStr = hh + ':' + mm;
+                  }
+                  
+                  return `
+                    <svg viewBox="0 0 622 300" class="digital-clock-svg">
+                      <defs>
+                        <linearGradient id="textFillGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                          <stop offset="0%" stop-color="rgba(152, 214, 252, 1)" />
+                          <stop offset="100%" stop-color="rgba(65, 144, 220, 0.5)" />
+                        </linearGradient>
+                        
+                        <linearGradient id="textBorderGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                          <stop offset="0%" stop-color="rgba(125, 205, 255, 0.5)" />
+                          <stop offset="100%" stop-color="rgba(138, 213, 255, 1)" />
+                        </linearGradient>
+                      </defs>
+                      
+                      <text x="310" y="135" 
+                            text-anchor="middle" 
+                            dominant-baseline="central" 
+                            fill="rgba(255, 255, 255, 0.06)" 
+                            class="svg-clock-bg">88:88</text>
+                            
+                      <text x="310" y="135" 
+                            text-anchor="middle" 
+                            dominant-baseline="central" 
+                            fill="url(#textFillGrad)" 
+                            stroke="url(#textBorderGrad)" 
+                            class="svg-clock-fg">${timeStr}</text>
+                    </svg>
+                  `;
+                ]]]
+          - type: grid
+            square: false
+            layout_options:
+              grid_columns: full
+              grid_rows: 2
+            columns: 2
+            cards:
+              - type: custom:button-card
+                name: Snooze
+                card_mod:
+                  style: |
+                    :host {
+                      {% if not is_state('input_boolean.alarm_ringing', 'on') %}
+                      opacity: 40%;
+                      filter: blur(2px);
+                      pointer-events: none;
+                      {% endif %}
+
+                      display: block !important;
+                      position: relative !important; 
+                      margin: 0px !important;
+                      cursor: pointer;
+                      transition: transform 0.2s ease, filter 0.2s ease;
+                    } 
+                    ha-card {
+                      font-family: 'Dongle', sans-serif;
+                      background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.03) 100%) !important;
+                      backdrop-filter: blur(30px) saturate(120%) brightness(95%) !important;
+                      -webkit-backdrop-filter: blur(30px) saturate(120%) brightness(95%) !important;
+                      box-shadow: inset -6px 6px 12px rgba(0, 0, 0, 0.08), inset 3px -3px 12px rgba(255, 255, 255, 0.03), 3px 10px 25px rgba(0, 0, 0, 0.2) !important;
+                      border: none !important;
+                      position: relative;
+                    } 
+                    ha-card:hover {
+                      filter: brightness(1.05);
+                    }
+                    ha-card:active {
+                      transform: scale(0.98);
+                      background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.08) 100%) !important;
+                    }
+                    :host:has(ha-card:active)::after {
+                      transform: scale(0.98) !important;
+                      background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.08) 100%) !important;
+                    }
+                    ha-card::before {
+                      content: "" !important;
+                      position: absolute !important;
+                      inset: 0 !important;
+                      padding: 0.11rem !important;
+                      background: linear-gradient(60deg, rgba(255,255,255,0.0) 0%, rgba(255,255,255,0.2) 49%, rgba(255,255,255,0.2) 51%, rgba(255,255,255,0.0) 100%) !important;
+                      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0) !important;
+                      -webkit-mask-composite: xor !important;
+                      mask-composite: exclude !important;
+                      pointer-events: none !important;
+                    } 
+                    :host::after {
+                      border-radius: 40px !important;
+                      content: "" !important;
+                      position: absolute !important;
+                      inset: 0 !important;
+                      background: linear-gradient(180deg, rgba(255,255,255, 0.1) 20%, rgba(255,255,255, 0.0) 100%) !important; 
+                      box-shadow: inset -8px 10px 15px rgba(0, 0, 0, 0) !important;
+                      pointer-events: none !important;
+                      z-index: -1 !important;
+                    }
+                styles:
+                  card:
+                    - border-radius: 40px !important
+                    - height: 60px
+                    - align-items: center
+                    - justify-content: center
+                    - padding: 0
+                    - margin: 0
+                    - box-sizing: border-box
+                  name:
+                    - color: rgba(255, 255, 255, 0.9)
+                    - font-size: 32px
+                    - font-weight: 400
+                    - text-box: trim-both cap alphabetic
+                    - padding: 10px
+                    - align-self: center
+                    - justify-self: center
+                    - letter-spacing: 0.01em
+                tap_action:
+                  action: call-service
+                  service: input_button.press
+                  target:
+                    entity_id: input_button.alarm_snooze
+              - type: custom:button-card
+                card_mod:
+                  style: |
+                    :host {
+                      {% if not is_state('input_boolean.alarm_ringing', 'on') %}
+                      opacity: 40%;
+                      filter: blur(2px);
+                      pointer-events: none;
+                      {% endif %}
+                    }
+                styles:
+                  grid:
+                    - grid-template-areas: "\"label_text icon_button\""
+                    - grid-template-columns: 1fr auto
+                    - align-items: center
+                  card:
+                    - background: transparent !important
+                    - border: none !important
+                    - box-shadow: none !important
+                    - height: 60px
+                    - padding: 0px 8px 0px 24px
+                    - box-sizing: border-box
+                    - overflow: visible
+                  custom_fields:
+                    label_text:
+                      - justify-self: end
+                      - color: rgba(255, 255, 255, 0.5)
+                      - font-family: "'Dongle', sans-serif"
+                      - font-size: 32px
+                      - text-box: trim-both cap alphabetic
+                      - padding: 10px 20px
+                      - letter-spacing: 0.01em
+                custom_fields:
+                  label_text: Stop
+                  icon_button:
+                    card:
+                      type: custom:button-card
+                      show_icon: false
+                      show_name: false
+                      tap_action:
+                        action: call-service
+                        service: input_button.press
+                        target:
+                          entity_id: input_button.alarm_stop
+                      styles:
+                        card:
+                          - width: 54px
+                          - height: 54px
+                          - box-sizing: border-box
+                      card_mod:
+                        style: |
+                          :host {
+                            display: block !important;
+                            position: relative !important; 
+                            width: 54px !important;
+                            height: 54px !important;
+                            border-radius: 50% !important;
+                            margin: 0px !important;
+                            cursor: pointer;
+                            transition: transform 0.2s ease, filter 0.2s ease;
+                            box-shadow: inset -6px 6px 12px rgba(0, 0, 0, 0.08), inset 3px -3px 12px rgba(255, 255, 255, 0.03), 3px 10px 25px rgba(0, 0, 0, 0.2) !important;
+                          } 
+                          ha-card {
+                            background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.2) 100%) !important;
+                            backdrop-filter: blur(30px) saturate(120%) brightness(95%) !important;
+                            -webkit-backdrop-filter: blur(30px) saturate(120%) brightness(95%) !important;
+                            box-shadow: inset -6px 6px 12px rgba(0, 0, 0, 0.08), inset 3px -3px 12px rgba(255, 255, 255, 0.03) !important;
+                            border: none !important;
+                            border-radius: 50% !important;
+                            width: 54px !important;
+                            height: 54px !important;
+                            position: relative;
+                            mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 42 42'%3E%3Cpath fill='white' fill-rule='evenodd' d='M0 0h42v42H0ZM16 14h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H16a2 2 0 0 1-2-2V16a2 2 0 0 1 2-2Z'/%3E%3C/svg%3E") !important;
+                            -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 42 42'%3E%3Cpath fill='white' fill-rule='evenodd' d='M0 0h42v42H0ZM16 14h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H16a2 2 0 0 1-2-2V16a2 2 0 0 1 2-2Z'/%3E%3C/svg%3E") !important;
+                          } 
+                          ha-card:hover {
+                            filter: brightness(1.05);
+                          }
+                          ha-card:active {
+                            transform: scale(0.98);
+                            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.3) 100%) !important;
+                          } 
+                          :host:has(ha-card:active)::after {
+                            transform: scale(0.98) !important;
+                            background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.08) 100%) !important;
+                          }
+                          ha-card::before {
+                            content: "" !important;
+                            position: absolute !important;
+                            inset: 0 !important;
+                            border-radius: 50% !important;
+                            padding: 0.11rem !important;
+                            background: linear-gradient(60deg, rgba(255,255,255,0.0) 0%, rgba(255,255,255,0.2) 49%, rgba(255,255,255,0.2) 51%, rgba(255,255,255,0.0) 100%) !important;
+                            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0) !important;
+                            -webkit-mask-composite: xor !important;
+                            mask-composite: exclude !important;
+                            pointer-events: none !important;
+                          } 
+                          :host::after {
+                            content: "" !important;
+                            position: absolute !important;
+                            inset: 0 !important;
+                            border-radius: 50% !important;
+                            background: linear-gradient(180deg, rgba(255,255,255, 0.1) 20%, rgba(255,255,255, 0.0) 100%) !important; 
+                            box-shadow: inset -8px 10px 15px rgba(0, 0, 0, 0.1) !important;
+                            pointer-events: none !important;
+                            z-index: -1 !important;
+                          }
+          - type: custom:button-card
+            show_state: false
+            show_name: false
+            show_icon: false
+            styles:
+              card:
+                - visibility: hidden
+            card_mod:
+              style: |
+                :host::after {
+                  content: "" !important;
+                  position: fixed !important;
+                  top: 0 !important;
+                  left: 0 !important;
+                  width: 100vw !important;
+                  height: 100vh !important;
+                  z-index: 9999 !important; 
+                  pointer-events: none !important;
+                  {% set hour = now().hour %}
+                  {% if 5 <= hour < 12 %}
+                    backdrop-filter: brightness(100%) contrast(100%) !important;
+                    -webkit-backdrop-filter: brightness(100%) contrast(100%) !important;
+                  {% elif 12 <= hour < 18 %}
+                    background: linear-gradient(rgba(255, 215, 110, 0.07), rgba(240, 130, 10, 0.42)) !important;
+                    backdrop-filter: brightness(98%) contrast(102%) !important;
+                    -webkit-backdrop-filter: brightness(98%) contrast(102%) !important !important;
+                  {% elif 18 <= hour < 20 %}
+                    background: linear-gradient(rgba(255, 240, 0, 0.11), rgba(30, 4, 70, 0.65)) !important;
+                    backdrop-filter: brightness(80%) contrast(104%) !important;
+                    -webkit-backdrop-filter: brightness(80%) contrast(104%) !important;
+                  {% else %}
+                    background: linear-gradient(rgba(90, 0, 80, 0.18), rgba(2, 0, 9, 1)) !important;
+                    backdrop-filter: brightness(70%) contrast(108%) !important;
+                    -webkit-backdrop-filter: brightness(70%) contrast(108%) !important;
+                  {% endif %}
+                }
+        column_span: 2
+    max_columns: 2
+    cards: []
+  - type: sections
+    title: Set Alarm Clock
+    path: set-alarm-clock
+    icon: mdi:clock-edit
+    background: center / cover no-repeat fixed url('/local/img/iklas-OPvpcO8Tq3c.webp')
+    sections:
+      - cards:
+          - type: custom:button-card
+            name: Set Alarm Clock
+            show_name: false
+            layout_options:
+              grid_columns: full
+              grid_rows: auto
+            styles:
+              card:
+                - background: transparent
+                - border: none
+                - box-shadow: none
+                - padding: 50px 0px 0px 12px
+              name:
+                - font-family: "'Dongle', sans-serif"
+                - font-size: 55px
+                - font-weight: 400
+                - color: rgba(255,255,255,0.9)
+                - letter-spacing: 0.5px
+                - line-height: 0.7
+                - justify-self: start
+                - text-align: left
+                - margin-bottom: 15px
+          - type: custom:button-card
+            show_state: false
+            show_name: false
+            show_icon: false
+            layout_options:
+              grid_columns: full
+              grid_rows: auto
+            triggers_update:
+              - sensor.alarm_clock_items
+              - input_datetime.alarm_picker
+            card_mod:
+              style: |
+                :host, #aspect-ratio {
+                  max-width: none !important;
+                  justify-self: center !important;
+                  width: 100% !important;
+                }
+                ha-card {
+                  scrollbar-width: none !important;
+                  overflow: visible !important;
+                }
+                ha-card::-webkit-scrollbar {
+                  display: none !important;
+                }
+            styles:
+              grid:
+                - grid-template-areas: "\"todo\""
+                - align-content: start
+                - align-self: start
+                - padding: 0px
+                - margin: 0px
+              card:
+                - margin: 0px
+                - width: 100%
+                - background-color: transparent
+                - padding: 0px
+                - border: none
+                - overflow: visible
+            custom_fields:
+              todo:
+                card:
+                  type: custom:layout-card
+                  layout_type: custom:grid-layout
+                  layout:
+                    grid-template-columns: 1fr auto
+                    margin: 0px
+                    grid-gap: 10px
+                  cards:
+                    - type: custom:button-card
+                      entity: input_datetime.alarm_picker
+                      name: Set Time
+                      show_state: true
+                      show_name: true
+                      show_icon: false
+                      tap_action:
+                        action: more-info
+                      card_mod:
+                        style: |
+                          :host {
+                            margin: 0px !important;
+                          }
+                          ha-card {
+                            font-family: 'Dongle', sans-serif !important;
+                            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.03) 100%) !important;
+                            backdrop-filter: blur(30px) saturate(120%) brightness(95%) !important;
+                            -webkit-backdrop-filter: blur(30px) saturate(120%) brightness(95%) !important;
+                            box-shadow: inset -6px 6px 12px rgba(0, 0, 0, 0.08), inset 3px -3px 12px rgba(255, 255, 255, 0.03), 3px 10px 25px rgba(0, 0, 0, 0.15) !important;
+                            border: none !important;
+                            border-radius: 16px !important;
+                            transition: transform 0.15s ease, background-color 0.15s ease !important;
+                          }
+                          ha-card:active {
+                            transform: scale(0.98) !important;
+                            background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.05) 100%) !important;
+                          }
+                          ha-card::before {
+                            content: "" !important;
+                            position: absolute !important;
+                            inset: 0 !important;
+                            border-radius: 16px !important;
+                            padding: 0.11rem !important;
+                            background: linear-gradient(60deg, rgba(255,255,255,0.0) 0%, rgba(255,255,255,0.18) 49%, rgba(255,255,255,0.18) 51%, rgba(255,255,255,0.0) 100%) !important;
+                            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0) !important;
+                            -webkit-mask-composite: xor !important;
+                            mask-composite: exclude !important;
+                            pointer-events: none !important;
+                          }
+                      styles:
+                        card:
+                          - height: 68px
+                          - padding: 0px 16px
+                          - margin: 0px
+                          - align-items: center
+                          - box-sizing: border-box
+                        grid:
+                          - grid-template-areas: "\"n s\""
+                          - grid-template-columns: 1fr auto
+                          - grid-template-rows: 1fr
+                          - align-items: center
+                          - gap: 12px
+                        name:
+                          - justify-self: start
+                          - align-self: center
+                          - color: rgba(255, 255, 255, 0.85)
+                          - font-size: 32px
+                          - font-weight: 400
+                          - text-box: trim-both cap alphabetic
+                          - letter-spacing: 0.01em
+                          - padding: 10px 0px
+                        state:
+                          - justify-self: end
+                          - align-self: center
+                          - color: rgba(255, 255, 255, 1)
+                          - font-size: 32px
+                          - font-weight: 300
+                          - background: rgba(0, 0, 0, 0.2)
+                          - text-box: trim-both cap alphabetic
+                          - padding: 12px
+                          - border-radius: 10px
+                          - box-shadow: inset 0px 2px 4px rgba(0,0,0,0.2)
+                    - type: custom:button-card
+                      icon: mdi:plus
+                      name: Add
+                      show_name: false
+                      show_icon: true
+                      tap_action:
+                        action: call-service
+                        service: script.add_new_alarm
+                      card_mod:
+                        style: |
+                          :host {
+                            margin: 0px !important;
+                          }
+                          ha-card {
+                            font-family: 'Dongle', sans-serif;
+                            background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.05) 100%) !important;
+                            backdrop-filter: blur(30px) saturate(120%) brightness(95%) !important;
+                            -webkit-backdrop-filter: blur(30px) saturate(120%) brightness(95%) !important;
+                            box-shadow: inset -6px 6px 12px rgba(0, 0, 0, 0.08), inset 3px -3px 12px rgba(255, 255, 255, 0.03), 3px 10px 25px rgba(0, 0, 0, 0.2) !important;
+                            border: none !important;
+                            border-radius: 16px !important;
+                            transition: transform 0.15s ease, background-color 0.15s ease;
+                          }
+                          ha-card:active {
+                            transform: scale(0.96) !important;
+                            background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.08) 100%) !important;
+                          }
+                          ha-card::before {
+                            content: "" !important;
+                            position: absolute !important;
+                            inset: 0 !important;
+                            border-radius: 16px !important;
+                            padding: 0.11rem !important;
+                            background: linear-gradient(60deg, rgba(255,255,255,0.0) 0%, rgba(255,255,255,0.25) 49%, rgba(255,255,255,0.25) 51%, rgba(255,255,255,0.0) 100%) !important;
+                            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0) !important;
+                            -webkit-mask-composite: xor !important;
+                            mask-composite: exclude !important;
+                            pointer-events: none !important;
+                          }
+                      styles:
+                        card:
+                          - height: 68px
+                          - width: 68px
+                          - padding: 0px 20px
+                          - margin: 0px
+                          - box-sizing: border-box
+                        icon:
+                          - color: rgba(255, 255, 255, 0.9)
+                          - width: 24px
+                          - height: 24px
+          - type: custom:button-card
+            show_state: false
+            show_name: false
+            show_icon: false
+            layout_options:
+              grid_columns: full
+              grid_rows: auto
+            triggers_update:
+              - sensor.alarm_clock_items
+            styles:
+              grid:
+                - grid-template-areas: "\"todo\""
+                - align-content: start
+                - align-self: start
+                - justify-content: start
+                - justify-self: start
+                - padding: 0px
+              card:
+                - display: flex
+                - align-content: start
+                - align-self: start
+                - justify-content: start
+                - justify-self: start
+                - background-color: transparent
+                - padding: 0px
+                - margin-top: 0px
+                - border: none
+                - overflow: visible
+              custom_fields:
+                todo:
+                  - overflow: visible
+            custom_fields:
+              todo:
+                card:
+                  type: vertical-stack
+                  cards:
+                    - type: custom:layout-card
+                      layout_type: custom:grid-layout
+                      card_mod:
+                        style: |
+                          :host {
+                            overflow: visible !important;
+                          }
+                      layout:
+                        grid-template-columns: repeat(7, 1fr)
+                        margin: 0px
+                        grid-gap: 10px
+                      cards:
+                        - type: custom:button-card
+                          entity: input_boolean.alarm_sun
+                          name: S
+                          template: day_selector_button
+                        - type: custom:button-card
+                          entity: input_boolean.alarm_mon
+                          name: M
+                          template: day_selector_button
+                        - type: custom:button-card
+                          entity: input_boolean.alarm_tue
+                          name: T
+                          template: day_selector_button
+                        - type: custom:button-card
+                          entity: input_boolean.alarm_wed
+                          name: W
+                          template: day_selector_button
+                        - type: custom:button-card
+                          entity: input_boolean.alarm_thu
+                          name: T
+                          template: day_selector_button
+                        - type: custom:button-card
+                          entity: input_boolean.alarm_fri
+                          name: F
+                          template: day_selector_button
+                        - type: custom:button-card
+                          entity: input_boolean.alarm_sat
+                          name: S
+                          template: day_selector_button
+          - type: custom:layout-card
+            layout_type: custom:grid-layout
+            layout_options:
+              grid_columns: full
+              grid_rows: auto
+            layout:
+              max_cols: 3
+              grid-template-columns: repeat(auto-fit, minmax(160px, 1fr))
+              grid-gap: 8px
+              margin: 0px
+            cards:
+              - type: custom:button-card
+                entity: input_boolean.alarm_target_master
+                name: Master
+                template: target_selector_button
+                variables:
+                  icon_color: var(--my-color-seven)
+              - type: custom:button-card
+                entity: input_boolean.alarm_target_kids
+                template: target_selector_button
+                variables:
+                  icon_color: var(--my-color-eight)
+              - type: custom:button-card
+                entity: input_boolean.alarm_target_living
+                template: target_selector_button
+                variables:
+                  icon_color: var(--my-color-four)
+              - type: custom:button-card
+                entity: input_boolean.alarm_target_office
+                template: target_selector_button
+                variables:
+                  icon_color: var(--my-color-nine)
+              - type: custom:button-card
+                entity: input_boolean.alarm_target_dining
+                template: target_selector_button
+                variables:
+                  icon_color: var(--my-color-five)
+              - type: custom:button-card
+                entity: input_boolean.alarm_target_kitchen
+                template: target_selector_button
+                variables:
+                  icon_color: var(--my-color-six)
+          - type: custom:button-card
+            icon: mdi:clock-digital
+            show_state: false
+            show_name: true
+            show_icon: false
+            tap_action:
+              action: none
+            layout_options:
+              grid_columns: full
+              grid_rows: auto
+            triggers_update:
+              - sensor.alarm_clock_items
+            card_mod:
+              style: |
+                ha-card {
+                  scrollbar-width: none !important;
+                  overflow: visible !important;
+                  pointer-events: auto;
+                }
+                ha-card::-webkit-scrollbar {
+                  display: none !important;
+                }
+                #i {
+                  justify-items: center;
+                }
+            styles:
+              name:
+                - font-family: "'Dongle', sans-serif"
+                - font-weight: 300
+                - font-size: 28px
+                - color: rgba(255,255,255,0.8)
+                - letter-spacing: 0.5px
+                - text-align: left
+                - justify-self: start
+                - align-self: center
+                - text-box: trim-both ex alphabetic
+                - padding: 20px 5px
+              icon:
+                - width: 40px
+                - margin: 0px 0px 20px 0px
+                - justify-self: center
+                - align-self: center
+                - color: rgba(255,255,255,0.8)
+                - pointer-events: auto
+              grid:
+                - grid-template-areas: |
+                    "i"
+                    "todo"
+                - grid-template-rows: auto 1fr
+                - grid-template-columns: 1fr
+                - align-content: start
+                - align-self: start
+                - justify-content: center
+                - justify-self: center
+                - padding: 0px
+              card:
+                - display: flex
+                - align-content: start
+                - align-self: start
+                - justify-items: center
+                - justify-content: center
+                - justify-self: center
+                - background-color: transparent
+                - padding: 0px
+                - margin: 0px 0px 80px 0px
+                - overflow-y: auto
+                - overflow-x: hidden
+                - border: none
+                - pointer-events: none
+            custom_fields:
+              i:
+                card:
+                  type: custom:button-card
+                  icon: mdi:clock-digital
+                  show_name: false
+                  show_state: false
+                  tap_action:
+                    action: navigate
+                    navigation_path: ./alarm-clock
+                  styles:
+                    card:
+                      - background-color: transparent
+                      - border: none
+                      - box-shadow: none
+                      - width: 70px
+                      - height: 56px
+                      - padding: 10px
+                      - margin: 0px 0px 10px 0px
+                      - justify-self: center
+                      - align-self: center
+                      - pointer-events: none
+                      - transition: transform 0.2s ease, filter 0.2s ease
+                    icon:
+                      - width: 40px
+                      - color: rgba(255,255,255,0.8)
+                  card_mod:
+                    style: |
+                      ha-card:hover {
+                        filter: brightness(1.3) drop-shadow(0px 0px 8px rgba(255, 255, 255, 0.4)) !important;
+                      }
+              todo:
+                card:
+                  type: custom:auto-entities
+                  card:
+                    type: vertical-stack
+                  card_param: cards
+                  filter:
+                    template: >
+                      {% set alarms = state_attr('sensor.alarm_clock_items',
+                      'alarms') %}
+
+                      {% if alarms %}
+                        {# Step 1: Map the alarms with their original index tracking #}
+                        {% set ns = namespace(items=[]) %}
+                        {% for i in range(alarms | length) %}
+                          {% set ns.items = ns.items + [{'orig_index': i, 'time': alarms[i].summary}] %}
+                        {% endfor %}
+                        
+                        {# Step 2: Sort by newest created first (highest original array index first) #}
+                        {% set sorted_by_creation = ns.items | sort(attribute='orig_index', reverse=true) %}
+                        
+                        {# Step 3: Sort by alarm time chronologically #}
+                        {% set final_sorted = sorted_by_creation | sort(attribute='time') %}
+                        
+                        [
+                        {% for item in final_sorted %}
+                          {
+                            "type": "custom:button-card",
+                            "template": "alarm_list_slot",
+                            "entity": "sensor.alarm_clock_items",
+                            "variables": {
+                              "slot_index": {{ item.orig_index }}
+                            },
+                            "styles": {
+                              "card": [
+                                {"margin-bottom": "6px"}
+                              ]
+                            }
+                          }{% if not loop.last %},{% endif %}
+                        {% endfor %}
+                        ]
+                      {% else %}
+                        []
+                      {% endif %}
+          - type: custom:button-card
+            show_state: false
+            show_name: false
+            show_icon: false
+            styles:
+              card:
+                - visibility: hidden
+            card_mod:
+              style: |
+                :host::after {
+                  content: "" !important;
+                  position: fixed !important;
+                  top: 0 !important;
+                  left: 0 !important;
+                  width: 100vw !important;
+                  height: 100vh !important;
+                  z-index: 9999 !important; 
+                  pointer-events: none !important;
+                  {% set hour = now().hour %}
+                  {% if 5 <= hour < 12 %}
+                    backdrop-filter: brightness(100%) contrast(100%) !important;
+                    -webkit-backdrop-filter: brightness(100%) contrast(100%) !important;
+                  {% elif 12 <= hour < 18 %}
+                    background: linear-gradient(rgba(255, 215, 110, 0.07), rgba(240, 130, 10, 0.42)) !important;
+                    backdrop-filter: brightness(98%) contrast(102%) !important;
+                    -webkit-backdrop-filter: brightness(98%) contrast(102%) !important !important;
+                  {% elif 18 <= hour < 20 %}
+                    background: linear-gradient(rgba(255, 240, 0, 0.11), rgba(30, 4, 70, 0.65)) !important;
+                    backdrop-filter: brightness(80%) contrast(104%) !important;
+                    -webkit-backdrop-filter: brightness(80%) contrast(104%) !important;
+                  {% else %}
+                    background: linear-gradient(rgba(90, 0, 80, 0.18), rgba(2, 0, 9, 1)) !important;
+                    backdrop-filter: brightness(70%) contrast(108%) !important;
+                    -webkit-backdrop-filter: brightness(70%) contrast(108%) !important;
+                  {% endif %}
+                }
+        column_span: 2
+    max_columns: 2
+    cards: []
